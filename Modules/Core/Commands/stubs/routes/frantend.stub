@@ -1,0 +1,71 @@
+<?php
+/******************
+//  api route create by SURANI AJIT
+//  suraniajit128335@gmail.com
+//  9737123443
+******************/
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+Route::prefix('$LOWER_NAME$')->group(function() {
+    Route::get('/', [
+        'as' => 'user.$LOWER_NAME$.index',
+        'uses' => '$CLASS$Controller@index',
+        'middleware' => 'can:user.$LOWER_NAME$.index'
+    ]);
+
+    Route::post('/filters', [
+        'as' => 'user.$LOWER_NAME$.filters',
+        'uses' => '$CLASS$Controller@filters',
+        'middleware' => 'can:user.$LOWER_NAME$.filters'
+    ]);
+
+    Route::get('/create', [
+        'as' => 'user.$LOWER_NAME$.create',
+        'uses' => '$CLASS$Controller@create',
+        'middleware' => 'can:user.$LOWER_NAME$.create'
+    ]);
+
+    Route::post('/', [
+        'as' => 'user.$LOWER_NAME$.store',
+        'uses' => '$CLASS$Controller@store',
+        'middleware' => 'can:user.$LOWER_NAME$.create'
+    ]);
+
+    Route::get('/edit/{id}', [
+        'as' => 'user.$LOWER_NAME$.edit',
+        'uses' => '$CLASS$Controller@edit',
+        'middleware' => 'can:user.$LOWER_NAME$.edit'
+    ]);
+
+    Route::put('/{id}', [
+        'as' => 'user.$LOWER_NAME$.update',
+        'uses' => '$CLASS$Controller@update',
+        'middleware' => 'can:user.$LOWER_NAME$.edit'
+    ]);
+
+    Route::delete('/delete/{id}', [
+        'as' => 'user.$LOWER_NAME$.delete',
+        'uses' => '$CLASS$Controller@delete',
+        'middleware' => 'can:user.$LOWER_NAME$.delete'
+    ]);
+
+    Route::delete('/massDelete', [
+        'as' => 'user.$LOWER_NAME$.mass_delete',
+        'uses' => '$CLASS$Controller@massDelete',
+        'middleware' => 'can:user.$LOWER_NAME$.mass_delete'
+    ]);
+    Route::post('/update_status', [
+        'as' => 'user.$LOWER_NAME$.update_status',
+        'uses' => '$CLASS$Controller@updateStatus',
+        'middleware' => 'can:user.$LOWER_NAME$.edit'
+    ]);
+});

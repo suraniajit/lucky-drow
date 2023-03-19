@@ -1,0 +1,7 @@
+<?php 
+namespace $REPOSITORY_INTERFACE_NAMESPACE$;
+interface RepositoryInterface
+{  
+    public function getAll();
+    public function store(array $parms);
+}

@@ -1,0 +1,26 @@
+{
+    "name": "ajit/core",
+    "description": "",
+    "authors": [
+        {
+            "name": "surani ajit",
+            "email": "ajit@server.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Core\\": ""
+        },
+        "files": [
+            "Modules/Core/helpers.php",
+        ]
+    }
+}

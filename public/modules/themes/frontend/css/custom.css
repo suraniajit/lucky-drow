@@ -1,0 +1,32 @@
+
+#video-viewport {
+    position: absolute1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+video {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.mth12 {
+    margin-bottom: 12px;
+    margin-left: 42px;
+    font-size: 17px;
+    text-align: -webkit-left;
+}
+.image_icon_bult {
+    height: 21px;
+    margin-right: 9px;
+}
+.blog-thumbnail1{
+    text-align: center;
+}
+.center{
+    text-align: center;
+}

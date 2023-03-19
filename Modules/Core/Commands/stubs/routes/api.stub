@@ -1,0 +1,67 @@
+<?php
+/******************/
+//  api route create by SURANI AJIT
+//  suraniajit128335@gmail.com
+//  9737123443
+/******************/
+
+use Illuminate\Http\Request;
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+Route::prefix('$LOWER_NAME$')->group(function() {
+    Route::get('/', [
+        'as' => 'api.$LOWER_NAME$.index',
+        'uses' => '$CLASS$Controller@index',
+        'middleware' => 'able:admin.$LOWER_NAME$.index'
+    ]);
+
+    Route::post('/filters', [
+        'as' => 'api.$LOWER_NAME$.filters',
+        'uses' => '$CLASS$Controller@filters',
+        'middleware' => 'able:admin.$LOWER_NAME$.filters'
+    ]);
+
+
+    Route::post('/save', [
+        'as' => 'api.$LOWER_NAME$.store',
+        'uses' => '$CLASS$Controller@store',
+        'middleware' => 'able:admin.$LOWER_NAME$.create'
+    ]);
+
+    Route::get('/edit/{id}', [
+        'as' => 'api.$LOWER_NAME$.edit',
+        'uses' => '$CLASS$Controller@edit',
+        'middleware' => 'able:admin.$LOWER_NAME$.edit'
+    ]);
+
+    Route::put('/{id}', [
+        'as' => 'api.$LOWER_NAME$.update',
+        'uses' => '$CLASS$Controller@update',
+        'middleware' => 'able:admin.$LOWER_NAME$.edit'
+    ]);
+
+    Route::delete('/delete/{id}', [
+        'as' => 'api.$LOWER_NAME$.delete',
+        'uses' => '$CLASS$Controller@delete',
+        'middleware' => 'able:admin.$LOWER_NAME$.delete'
+    ]);
+
+    Route::delete('/massDelete', [
+        'as' => 'api.$LOWER_NAME$.mass_delete',
+        'uses' => '$CLASS$Controller@massDelete',
+        'middleware' => 'able:admin.$LOWER_NAME$.mass_delete'
+    ]);
+    Route::post('/update_status', [
+        'as' => 'api.$LOWER_NAME$.update_status',
+        'uses' => '$CLASS$Controller@updateStatus',
+        'middleware' => 'able:admin.$LOWER_NAME$.edit'
+    ]);
+});

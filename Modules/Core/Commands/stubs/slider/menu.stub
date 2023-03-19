@@ -1,0 +1,46 @@
+
+<?php
+/**
+*   Develop By Surani Ajit
+*   Gmail:-suraniajit128335@gmail.com
+*
+*/
+
+/**
+* $menuArray =
+*            [
+*               [
+*                   'icon'=>'far fa-circle nav-icon',
+*                   'href'=>'#',
+*                   'title'=>'$LOWER_NAME$',
+*                   'middleware=>'', 
+                ],
+*               [
+*                   'icon'=>'far fa-circle nav-icon',
+*                    'href'=>'#',
+*                    'title'=>'$LOWER_NAME$ menu2',
+*                    'middleware'=>'', 
+*                ],
+*                [
+*                    'icon'=>'nav-icon fas fa-tachometer-alt',
+*                    'title'=>'$LOWER_NAME$ sub menu5',
+*                    'sub-menu'=>[
+*                            [
+*                                'icon'=>'far fa-circle nav-icon',
+*                                'href'=>'#',
+*                                'title'=>'$LOWER_NAME$ menu3',
+*                                'middleware=>'',
+*                            ],
+*                            [
+*                                'icon'=>'far fa-circle nav-icon',
+*                                'href'=>'#',
+*                                'title'=>'$LOWER_NAME$ menu4',
+*                                 'middleware=>'',
+*                            ],      
+*                    ]
+*                ],
+*           ];
+*/
+
+$menuArray =[];
+?>

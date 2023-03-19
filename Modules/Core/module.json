@@ -1,0 +1,37 @@
+{
+    "name": "Core",
+    "alias": "core",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 2,
+    "priority": 0,
+    "providers": [
+        "Modules\\Core\\Providers\\CoreServiceProvider"
+    ],
+    "aliases": 
+     {
+        "Illuminate\\Cache\\FileStore": "Modules\\Core\\Cache\\FileStore",
+        "Nwidart\\Modules\\Support\\Migrations\\SchemaParser": "Modules\\Core\\Support\\Migrations\\SchemaParser",
+        "Nwidart\\Modules\\Commands\\MigrationMakeCommand": "Modules\\Core\\Commands\\MigrationMakeCommand",
+        "Nwidart\\Modules\\Commands\\ProviderMakeCommand": "Modules\\Core\\Commands\\ProviderMakeCommand",
+        "Nwidart\\Modules\\Commands\\RouteProviderMakeCommand": "Modules\\Core\\Commands\\RouteProviderMakeCommand",
+        "Nwidart\\Modules\\Commands\\ControllerMakeCommand": "Modules\\Core\\Commands\\ControllerMakeCommand",
+        "Nwidart\\Modules\\Generators\\ModuleGenerator": "Modules\\Core\\Generators\\ModuleGenerator",
+        "Nwidart\\Modules\\Commands\\ModuleMakeCommand": "Modules\\Core\\Commands\\ModuleMakeCommand",
+        "Nwidart\\Modules\\Commands\\SeedCommand": "Modules\\Core\\Commands\\SeedCommand",
+        "Nwidart\\Modules\\Commands\\EnableCommand": "Modules\\Core\\Commands\\EnableCommand",
+        "Nwidart\\Modules\\Commands\\DisableCommand": "Modules\\Core\\Commands\\DisableCommand"
+    },
+    "files": [        
+        "composers.php",
+        "helpers.php",
+        "macros.php"
+    ],
+    "requires": [],
+    "cache": true,
+    "depends": [
+        "user",
+        "attribute"
+    ]
+}
