@@ -28,7 +28,7 @@ class APIAuthentication
                 echo 'APIAuthKey invalid or expired please check';
                 exit;
             }
-            $user = User::find($user_id->user_id);
+            $user = User::where('status',User::ACTIVE)->find($user_id->user_id);
             if(!$user){
                 echo 'APIAuthKey invalid ';
                 exit;

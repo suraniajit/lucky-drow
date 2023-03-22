@@ -10,3 +10,15 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/login', [
+    'as' => 'admin.backend.login',
+    'uses' => 'AuthController@login',
+]);
+Route::post('/login', [
+    'as' => 'admin.backend.login_check',
+    'uses' => 'AuthController@loginCheck',
+]);
+Route::post('/logout', [
+    'as' => 'admin.backend.logout',
+    'uses' => 'AuthController@logout',
+]);

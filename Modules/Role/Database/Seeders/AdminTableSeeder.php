@@ -19,42 +19,45 @@ class AdminTableSeeder extends Seeder
      */
     public function run()
     {
-        // Model::unguard();
+        $permissions =[
+            'admin.role.index',
+            'admin.role.create',
+            'admin.role.edit',
+            'admin.role.delete',
+            'admin.role.mass_delete',
+            'admin.permission.index',
+            'admin.permission.create',
+            'admin.permission.edit',
+            'admin.permission.delete',
+            'admin.permission.mass_delete',
+            'admin.user.index',
+            'admin.role.permission_change',
+            'admin.symbole.index',
+            'admin.show.index',
+            'admin.home.index',
+            'admin.show.create',
+            'admin.show.edit',
+            'admin.show.delete',
+            'admin.setting.index',
+            'admin.balance.index',
+            'admin.show.booking',
+            'admin.show.result',
+            'admin.show.history',
+        ];
         //create admin user 
         $user = User::create([
             'name' => 'Admin',
-            'email' => 'Reachus@certifytechnologies.com',
-            'password' => Hash::make('Certify@2023@2030'),
+            'email' => 'Admin@server.com',
+            'password' => Hash::make('Server@123'),
+            'status'=>1,
         ]);
         //create super admin role 
         $role = Role::create(['name' => config('core.super-admin')]);
         $user->assignRole(config('core.super-admin'));
        
-        //create permision
-        Permission::create(['name' => 'admin.role.index']);
-        Permission::create(['name' => 'admin.role.create']);
-        Permission::create(['name' => 'admin.role.edit']);
-        Permission::create(['name' => 'admin.role.delete']);
-        Permission::create(['name' => 'admin.role.mass_delete']);
-       
-        Permission::create(['name' => 'admin.permission.index']);
-        Permission::create(['name' => 'admin.permission.create']);
-        Permission::create(['name' => 'admin.permission.edit']);
-        Permission::create(['name' => 'admin.permission.delete']);
-        Permission::create(['name' => 'admin.permission.mass_delete']);
-       
-
-        //assign permission
-        $role->givePermissionTo('admin.role.index');
-        $role->givePermissionTo('admin.role.create');
-        $role->givePermissionTo('admin.role.edit');
-        $role->givePermissionTo('admin.role.delete');
-        $role->givePermissionTo('admin.role.mass_delete');
-        
-        $role->givePermissionTo('admin.permission.index');
-        $role->givePermissionTo('admin.permission.create');
-        $role->givePermissionTo('admin.permission.edit');
-        $role->givePermissionTo('admin.permission.delete');
-        $role->givePermissionTo('admin.permission.mass_delete');
+        foreach($permissions as $permission){
+            Permission::create(['name' => $permission]);
+            $role->givePermissionTo($permission);
+        }
     }
 }

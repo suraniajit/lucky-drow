@@ -16,7 +16,6 @@ class LoginRepository implements LoginInterface
     public function checkLogin($request){
         try {
             $user = User::where('email',$request->email)
-                    // ->where('password',md5($request->password))
                     ->first();
             if($user){
                 if(Hash::check($request->password, $user->password)) {

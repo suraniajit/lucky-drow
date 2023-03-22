@@ -163,8 +163,7 @@
                         }
                         $('#paginate').html(data.proparty.link);
                     }else{
-                        alert(1);
-                        Swal.fire({
+                         Swal.fire({
                             icon: 'error',
                             text: 'Something went wrong!',
                             showConfirmButton: false,
@@ -173,7 +172,6 @@
                     }
                 },
                 error: function(data) {
-                    alert(2);
                     Swal.fire({
                             icon: 'error',
                             text: 'Something went wrong!',

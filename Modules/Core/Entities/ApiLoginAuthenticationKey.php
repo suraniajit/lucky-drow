@@ -14,6 +14,7 @@ class ApiLoginAuthenticationKey extends Model
         'user_id',
         'driver',
         'login_time',
+        'logout_time',
     ];
     
     protected static function newFactory()

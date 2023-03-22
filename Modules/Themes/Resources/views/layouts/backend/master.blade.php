@@ -30,12 +30,13 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+
+        <a class="dropdown-item" href="{{ route('admin.backend.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
           <i class="fa fa-power-off" aria-hidden="true"></i>
         </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        <form id="logout-form" action="{{ route('admin.backend.logout') }}" method="POST" class="d-none">
           @csrf
-        
+          <input type="hidden" value="" name="_auth_key" id="_auth_key_id">
         </form>
       </li>
     </ul>
@@ -115,5 +116,8 @@
     <!-- sweetalert -->
     <script src="{{asset('modules/themes/backend/js/sweetalert/sweetalert2.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script>
+      $('#_auth_key_id').val(window.localStorage.getItem('token'));
+    </script>
     @stack('js-stack')
 </html>
