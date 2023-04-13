@@ -12,12 +12,15 @@ use Auth;
 class AuthController extends Controller
 {
     public function login(){
+        if (Auth::check()) {
+            return redirect(route('admin.home.index'));
+        }
         return view('themes::backend.auth.login');
     }
 
     public function loginCheck(Request $request){
         if (Auth::check()) {
-            return redirect()->intended('dashboard');
+            return redirect(route('admin.home.index'));
         }
         $credentials = $request->only('email', 'password');
         $credentials['status'] = User::ACTIVE;

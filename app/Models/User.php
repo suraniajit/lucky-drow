@@ -14,6 +14,10 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable,HasRoles;
     const ACTIVE =  1;
     const DEACTIVE = 2;
+    const ACTIVE_TEXT = 'Active';
+    const DEACTIVE_TEXT = 'Deactive';
+    
+
     
     /**
      * The attributes that are mass assignable.
@@ -26,6 +30,16 @@ class User extends Authenticatable
         'password',
         'status',
     ];
+    public function allStatus(){
+        return [
+            self::ACTIVE => self::ACTIVE_TEXT,
+            self::DEACTIVE => self::DEACTIVE_TEXT
+        ];
+    }
+    public function getStatus($status_code){
+        $option = $this->allStatus();
+        return $option[$status_code];
+    }
 
     /**
      * The attributes that should be hidden for serialization.

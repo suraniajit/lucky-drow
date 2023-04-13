@@ -15,11 +15,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', [
-    'as' => 'user.home.index',
-    'uses' => 'HomeController@index',
-]);
-Route::get('/wep', [
-    'as' => 'user.home.wep',
-    'uses' => 'HomeController@wep',
-]);
+// Route::get('/', [
+//     'as' => 'user.home.index',
+//     'uses' => 'HomeController@index',
+// ]);
+Route::get('/', function(){
+    return redirect(route('admin.backend.login'));
+});

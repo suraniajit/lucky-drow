@@ -11,7 +11,7 @@
                [
                    'icon'=>'fa fa-users nav-icon',
                    'href'=>route('admin.user.index'),
-                   'title'=>'User',
+                   'title'=>__('user::user/labels.user-slider-title'),
                    'middleware'=>'admin.user.index', 
                 ],
                 [

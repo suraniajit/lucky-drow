@@ -12,4 +12,6 @@ use Illuminate\Support\Facades\Artisan;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/', function(){
+    return redirect(route('admin.backend.login'));
+});

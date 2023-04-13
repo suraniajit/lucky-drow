@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', function(){
+    return redirect(route('admin.backend.login'));
+});
 Route::get('/login', [
     'as' => 'admin.backend.login',
     'uses' => 'AuthController@login',
