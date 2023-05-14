@@ -6,6 +6,8 @@
 {!! __('symbole::symbole/labels.symbole-page-title') !!}
 @endsection
 @push('css-stack')
+<link rel="stylesheet" href="{{asset('modules/themes/backend/css/custome/image.css')}}">
+<link rel="stylesheet" href="{{asset('modules/themes/backend/css/custome/html_note.css')}}">
 @endpush
 @section('content')
     <div class="col-lg-12">
@@ -76,6 +78,35 @@
                                     <label for="input_name">{!! __('symbole::symbole/labels.symbole-form-name') !!}</label>
                                     <input type="text" name="symbole_name" id="add_symbole_name" class="form-control" placeholder="{!! __('symbole::symbole/labels.symbole-form-placeolder-name') !!}">
                                 </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="file-upload">
+                                    <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Add Symbole</button>
+                                    <div class="image-upload-wrap">
+                                        <input class="file-upload-input" data-error=".errorTxtSymbole" name="symbole" type='file' onchange="readURL(this);" accept="image/*" />
+                                        <div class="drag-text">
+                                            <h3>Drag and drop a Symbole or select add Symbole</h3>
+                                        </div>
+                                    </div>
+                                    <div class="file-upload-content">
+                                        <img class="file-upload-image" src="#" alt="your image" />
+                                        <div class="image-title-wrap">
+                                            <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{--
+                            <div class="form-row">
+                                <div class="info note_div">
+                                    <p><strong>Logo Min Dimensions :    </strong> {{ config("clientpartners.logo_min_width")}} * {{ config("clientpartners.logo_min_height")}}</p>
+                                    <p><strong>Logo Max Dimensions :    </strong> {{ config("clientpartners.logo_max_width")}} * {{ config("clientpartners.logo_max_height")}}</p>
+                                </div>
+                                <div class="errorTxtSymbole text-danger">
+                                </div>
+                            </div>
+                            --}}
+                            <div class="form-row">
                                 <div class="custom-control custom-switch ">
                                     <input type="checkbox" checked class="custom-control-input show_status" id="add_custom_switch_status" name="symbole_status" value="1" >
                                     <label class="custom-control-label" for="add_custom_switch_status">{{ __('core::core/labels.gird-status') }}</label>
@@ -127,6 +158,7 @@
     
 @endsection
 @push('js-stack')
+<script src="{{asset('modules/themes/backend/js/custome/image.js')}}"></script>
     <script>
         $( document ).ready(function() {
             loadPageGrid();
@@ -134,11 +166,20 @@
      
         $('#submit').click(function(){
             var token = window.localStorage.getItem('token');
-                
+            var data = new FormData();
+            //Form data
+            var form_data = $('#symbole_form').serializeArray();
+            $.each(form_data, function (key, input) {
+                data.append(input.name, input.value);
+            });
+            var file_data = $('input[name="symbole"]')[0].files;
+                data.append("symbole", file_data[0]);
             $.ajax({
                 type: 'post',
                 url: "{{ url('') }}" +'/api/symbole/save',
-                data:$('#symbole_form').serialize(),
+                data:data, 
+                processData: false, 
+                contentType: false,
                 headers: {
                     'Authorization': 'Bearer ' ,
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -288,7 +329,7 @@
                                 var url = '{{url("/backend/role/permission-manage")}}/'+data.data[i].name;
                                 const clone = templ.content.cloneNode(true);
                                 clone.querySelector(".id").innerHTML =i+1;
-                                clone.querySelector(".image").innerHTML =data.data[i].name;
+                                clone.querySelector(".image").innerHTML = '<a target="_blank"  href="'+data.data[i].file+'"><img width="100" src="'+data.data[i].file+'"></a>';
                                 clone.querySelector(".name").innerHTML =data.data[i].name;
                                clone.querySelector(".status").innerHTML =data.data[i].status;
                                 var action_str ='<div class="row">';
@@ -299,17 +340,20 @@
                                                             '<label class="custom-control-label" for="customSwitch'+data.data[i].id+'"></label>'+
                                                         '</div>';
                                     action_str = action_str +''+status_button ;
+                                   {{--
                                     edit_button = '';
                                     var edit_button =   '<button type="button" onClick="getEditShow(this)" data-id="'+data.data[i].id+'" class="btn btn-info btn-sm" >'+
                                                             '<i class="fa fa-pencil" aria-hidden="true"></i>'+
                                                         '</button>';
                                     action_str = action_str +''+edit_button ;
+                                   --}}
                                 @endcan
                                 @can('admin.symbole.delete')
-                                    var delete_str = '<button type="button" onclick="deleteUser(this)" class="btn btn-danger btn-sm"  data-id="'+data.data[i].id+'">'+
+                                   {{-- var delete_str = '<button type="button" onclick="deleteSymbole(this)" class="btn btn-danger btn-sm"  data-id="'+data.data[i].id+'">'+
                                                         '<i class="fa fa-trash" aria-hidden="true"></i>'+
                                                     '</button>';
                                     action_str = action_str+''+ delete_str; 
+                                   --}}
                                 @endcan
                                 action_str = action_str+'</div>'; 
                                 // if(){}
@@ -385,7 +429,7 @@
         
 
         
-        function deleteUser(e){
+        function deleteSymbole(e){
             Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -397,7 +441,7 @@
             }).then((result) => {
                 if (result.value) {        
                     var id =$(e).attr('data-id');
-                    url = "{{ url('') }}" +'/api/user/delete/'+id;
+                    url = "{{ url('') }}" +'/api/symbole/delete/'+id;
                     var token = window.localStorage.getItem('token'); 
                     $.ajax({
                         type: 'post',

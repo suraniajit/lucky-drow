@@ -17,7 +17,8 @@ class UserRepository implements UserRepositoryInterface
     public function getAll(){
         try {
             $data=[];
-            $users =  User::paginate(10);
+            $superadmin = $users = User::role(config('core.super-admin'))->pluck('id')->toArray();
+            $users =  User::whereNotIn('users.id',$superadmin)->paginate(10);
             if($users){
                 foreach($users as $user){
                     $data[]=[
@@ -96,8 +97,9 @@ class UserRepository implements UserRepositoryInterface
                 throw new \ErrorException(config('core.super-admin') .' Naver change status');
             }
             if(!$user){
-                throw new \ErrorException('ser not found');
+                throw new \ErrorException('server not found');
             }
+
             $role = Role::whereNotIn('name',array( config('core.super-admin') ))->pluck('name');
             
             $data = [
@@ -106,6 +108,7 @@ class UserRepository implements UserRepositoryInterface
                     'name'          =>  $user->name,
                     'email'         =>  $user->email,
                     'status'        =>  $user->status,
+                    'roles'         =>  $user->getRoleNames()
                 ],
                 'roles'=>$role
             ];
@@ -118,6 +121,7 @@ class UserRepository implements UserRepositoryInterface
     } 
     public function update($param){
         try {
+            
             DB::beginTransaction();
             $user = User::find($param['id']);
             if(!$user){
@@ -128,13 +132,12 @@ class UserRepository implements UserRepositoryInterface
             }
             $data['name']= $param['user_name'];
             $data['email']= $param['user_email'];
-            $data['status']= $param['status'];
-            if(isset($param['password']) && $param['password'] != null && $param['password'] != '' ){
+            $data['status']= isset($param['status'])?User::ACTIVE:User::DEACTIVE;
+            if(isset($param['user_password']) && $param['user_password'] != null && $param['user_password'] != '' ){
                 $data['password']= Hash::make($param['user_password']);
             }
             $row = $user->update($data);
-            $user->syncRoles($user->getRoleNames());
-            $user->assignRole($param['user_role']);
+            $user->syncRoles($param['user_role']);
             if($row){
                 DB::commit();
                 return $this->successResponse(NULL, 'Successfully Status Updated!');

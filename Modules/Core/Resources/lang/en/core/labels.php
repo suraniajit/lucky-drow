@@ -22,5 +22,6 @@ return [
     'core-grid-no_data_found'=>'No Data Found',
     'core-page-create-title'=>'Create',
     'core-page-edit-title'=>'Edit',
+    'button_varify_title'=> "Varify"
     
 ];

@@ -1,0 +1,23 @@
+{
+    "name": "nwidart/booking",
+    "description": "",
+    "authors": [
+        {
+            "name": "Surani Ajit",
+            "email": "suraniajit128335@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Booking\\": ""
+        }
+    }
+}

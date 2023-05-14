@@ -12,12 +12,19 @@ class Symbole extends Model
     const DISABLE = 2;
     const ENABLE_TEXT =  'Enable';
     const DISABLE_TEXT = 'Disable';
-    const SYMBOLE_PATH = '';
+    const SYMBOLE_PATH = 'data/symbole';
     protected $fillable = [
         'name',
         'file',
         'status'
     ];
+    
+    public function getSymbolePath(){
+        return self::SYMBOLE_PATH;
+    }
+    public function getSymbole($image_name){
+        return self::SYMBOLE_PATH.'/'.$image_name;
+    }
     
     public function getStatusOptions(){
         return [

@@ -131,8 +131,8 @@
                                 </div>
                                
                                 <div class="form-group col-md-12">
-                                    <label for="inputPassword">{!! __('user::user/labels.user-form-password') !!}</label>
-                                    <input type="password" id="inputPassword" name="user_password" class="form-control " placeholder="{!! __('user::user/labels.user-form-placeolder-password') !!}">
+                                    <label for="inputPassword_edit">{!! __('user::user/labels.user-form-password') !!}</label>
+                                    <input type="password" id="inputPassword_edit" name="user_password" class="form-control " placeholder="{!! __('user::user/labels.user-form-placeolder-password') !!}">
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label for="inputRole">{!! __('user::user/labels.user-form-role') !!}</label>
@@ -141,8 +141,8 @@
                                     </select>
                                 </div>
                                 <div class="custom-control custom-switch ">
-                                    <input type="checkbox" class="custom-control-input user_status" name="status" value="1" id="customSwitch_status">
-                                    <label class="custom-control-label" for="customSwitch_status">{{ __('core::core/labels.gird-status') }}</label>
+                                    <input type="checkbox" class="custom-control-input user_status" name="status" value="1" id="edit_customSwitch_status">
+                                    <label class="custom-control-label" for="edit_customSwitch_status">{{ __('core::core/labels.gird-status') }}</label>
                                 </div>
                             </div>
                         </form>
@@ -272,7 +272,7 @@
             });
             loadPageGrid();
         }
-        function getEditShow(e){
+        function getEditUser(e){
             id = $(e).attr('data-id');
             url = "{{ url('') }}" +'/api/user/edit/'+id;
             var token = window.localStorage.getItem('token'); 
@@ -294,18 +294,22 @@
                         $('#data-id').val(data.data['user'].id);
                         $('#user_name').val(data.data['user'].name);
                         $('#user_email').val(data.data['user'].email);
+                        $('#inputPassword_edit').val('');
                         var role_option ='';
-                        console.log(data.data['roles'].length);
                         for(var i = 0; i<data.data['roles'].length;i++)
-                        {
-                            role_option = role_option+'<option value="'+data.data['roles'][i]+'">'+data.data['roles'][i]+'</option>';
+                        {   
+                            var is_selected ='';
+                            if(jQuery.inArray(data.data["roles"][i], data.data["user"].roles)!== -1){
+                                is_selected =' selected ';
+                            }
+                            role_option = role_option+'<option '+is_selected+'value="'+data.data["roles"][i]+'">'+data.data["roles"][i]+'</option>';
                         }
                         $('#edit_user_roles').html(role_option);
-                        $(".user_status").prop('checked', false);
-                        if(data.data.status==1){
-                            $('#customSwitch_status').prop('checked', true);
+                        
+                        if(data.data['user'].status == 1){
+                            $('#edit_customSwitch_status').prop('checked', true);
                         }else{
-                            $('#customSwitch_status').prop('checked', false);
+                            $('#edit_customSwitch_status').prop('checked', false);
                         }
                         $('#edit_user_modal').modal('toggle');
                        
@@ -368,7 +372,7 @@
                                                         '</div>';
                                     action_str = action_str +''+status_button ;
                                     edit_button = '';
-                                    var edit_button =   '<button type="button" onClick="getEditShow(this)" data-id="'+data.data[i].id+'" class="btn btn-info btn-sm" >'+
+                                    var edit_button =   '<button type="button" onClick="getEditUser(this)" data-id="'+data.data[i].id+'" class="btn btn-info btn-sm" >'+
                                                             '<i class="fa fa-pencil" aria-hidden="true"></i>'+
                                                         '</button>';
                                     action_str = action_str +''+edit_button ;

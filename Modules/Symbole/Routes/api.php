@@ -48,7 +48,7 @@ Route::prefix('symbole')->group(function() {
         'middleware' => 'able:admin.symbole.edit'
     ]);
 
-    Route::delete('/delete/{id}', [
+    Route::post('/delete/{id}', [
         'as' => 'api.symbole.delete',
         'uses' => 'symboleController@delete',
         'middleware' => 'able:admin.symbole.delete'

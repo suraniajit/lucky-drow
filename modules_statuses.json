@@ -24,5 +24,8 @@
     "Careers": true,
     "Symbole": true,
     "Show": true,
-    "Setting": true
+    "Setting": true,
+    "Balance": true,
+    "Booking": true,
+    "Result": true
 }

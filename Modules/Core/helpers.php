@@ -54,7 +54,16 @@ if (!function_exists('createThumbnail')) {
         
     }
 }
-
+if (!function_exists('uploadImage')) {
+    function uploadImage($params)
+    {   
+        $file = $params['file'];
+        $path_to_store = $params['path'];
+        $filenametostore = $params['name'];
+        $file->move(public_path($path_to_store), $filenametostore);
+        return $filenametostore; 
+    }
+}
 
 if (!function_exists('displayAlert')) {
     function displayAlert()
@@ -73,12 +82,44 @@ if (!function_exists('displayAlert')) {
         }
     }
 }
-
-
 if (!function_exists('getThemeString')) {
     function getThemeString()
     {   
         return [];
+    }
+}
+
+if (!function_exists('getTransactionNo')) {
+    function getTransactionNo()
+    {   
+        return uniqid();
+    }
+}
+if (!function_exists('getDateTime')) {
+    function getDateTime($datetime)
+    {   
+        return date('d M Y h:i:s',strtotime($datetime));
+    }
+}
+if (!function_exists('getDate')) {
+    function getDate($datetime)
+    {   
+        return date('d M Y',strtotime($datetime));
+    }
+}
+if (!function_exists('getTime')) {
+    function getTime($datetime)
+    {   
+        return date('h:i:s',strtotime($datetime));
+    }
+}
+
+
+    
+if (!function_exists('getOTP')) {
+    function getOTP()
+    {   
+        return rand(100000, 999999);
     }
 }
 if (!function_exists('getDays')) {

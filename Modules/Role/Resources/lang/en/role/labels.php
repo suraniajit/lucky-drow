@@ -16,6 +16,7 @@ return [
     'role-page-title'=>'Role',
     'role-form-add'=>'Add Role',
     'role-form-name'=>'Name',
-    'role-permission-page-title'=> 'Manage Role Permission'
+    'role-permission-page-title'=> 'Manage Role Permission',
+    'themes_setting-slider-title'=>'Themes Setting',
 
 ];

@@ -5,7 +5,6 @@ namespace Modules\Symbole\Http\Controllers\Api;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\User\Repository\Backend\UserRepository;
 use Modules\Symbole\Repository\Backend\SymboleRepository;
 
 class SymboleController extends Controller
@@ -47,9 +46,9 @@ class SymboleController extends Controller
         return $response;
     }
     
-    public function destroy($id)
+    public function delete($id)
     {
-        $symbole_repository = new symbole_repository();
+        $symbole_repository = new SymboleRepository();
         $response =  $symbole_repository->distroy($id);
         return $response;
     }

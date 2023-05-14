@@ -15,3 +15,8 @@ Route::get('/home', [
     'uses' => 'HomeController@index',
     'middleware' => 'can:admin.home.index'
 ]);
+Route::get('/themes_setting', [
+    'as' => 'admin.themes.setting',
+    'uses' => 'ThemesController@setting',
+    'middleware' => 'can:admin.themes.setting'
+]);

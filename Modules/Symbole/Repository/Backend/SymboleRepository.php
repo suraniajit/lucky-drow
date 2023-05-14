@@ -7,6 +7,7 @@ use Modules\Core\Traits\AjaxPagination;
 use Modules\Symbole\Contract\Backend\SymboleRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use  Modules\Symbole\Entities\Symbole;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\User;
 
@@ -27,6 +28,7 @@ class SymboleRepository implements SymboleRepositoryInterface
                         'name'          =>  $symbole->name,
                         'status'        =>  $symbole->getStatusText($symbole->status),
                         'status_id'     =>  $symbole->status,
+                        'file'          =>  asset($symbole->getSymbole($symbole->file)),
                     ];
                 }
                 return $this->successResponseArray($data, 'Successfully Get User List!',null,['link'=>$this->ajaxPaginateLink($symboles)]);
@@ -62,13 +64,19 @@ class SymboleRepository implements SymboleRepositoryInterface
 
     public function store($param){
         try {
+
                 DB::beginTransaction();
-                $symbole = Symbole::create([
-                    'name'          =>  $param['symbole_name'],
-                    'status'        =>  $param['symbole_status'],
-                    'file'          => 'ss',
-                ]);
-                
+                $symbole = new Symbole();
+                $image_param = [
+                    'file'=>$param['symbole'],
+                    'path'=>$symbole->getSymbolePath(),
+                    'name'=>time().'.'.$param['symbole']->extension(),
+                ];
+                $image_name = uploadImage($image_param); 
+                $symbole->name = $param['symbole_name'];
+                $symbole->file = $image_name;
+                $symbole->status = $param['symbole_status'];
+                $symbole->save();
             if($symbole){
                 DB::commit();
                 return $this->successResponse(NULL, 'Symbole Successfully add!');
@@ -124,21 +132,19 @@ class SymboleRepository implements SymboleRepositoryInterface
         }    
     }
 
-    /*
+
     public function distroy($id){
         try {
             DB::beginTransaction();
-            $user = User::find($id);
-            if(!$user){
-                throw new \ErrorException('User not found');
+            $symbole = Symbole::find($id);
+            if(!$symbole){
+                throw new \ErrorException('Symbole not found');
             }
-            if($user->hasRole(config('core.super-admin'))){
-                throw new \ErrorException(config('core.super-admin') .' Naver change status');
-            }
-            $row = $user->delete();
+            
+            $row = $symbole->delete();
             if($row){
                 DB::commit();
-                return $this->successResponse(NULL, 'Successfully Status delete!');
+                return $this->successResponse(NULL, 'Successfully Symbole delete!');
             }
             DB::rollback();
             return $this->errorResponse();
@@ -148,5 +154,4 @@ class SymboleRepository implements SymboleRepositoryInterface
             return $this->errorResponse();
         }
     }
-    */
 }

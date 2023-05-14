@@ -23,10 +23,3 @@ Route::prefix('user')->group(function() {
         'middleware' => 'can:admin.user.index'
     ]);
 });
-Route::prefix('balance')->group(function() {
-    Route::get('/', [
-        'as' => 'admin.balance.index',
-        'uses' => 'BalanceController@index',
-        'middleware' => 'can:admin.balance.index'
-    ]);
-});

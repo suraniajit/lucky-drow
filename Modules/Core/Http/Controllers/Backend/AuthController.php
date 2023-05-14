@@ -19,7 +19,7 @@ class AuthController extends Controller
     }
 
     public function loginCheck(Request $request){
-        if (Auth::check()) {
+        if (Auth::check() && Auth::status == User::ACTIVE) {
             return redirect(route('admin.home.index'));
         }
         $credentials = $request->only('email', 'password');
