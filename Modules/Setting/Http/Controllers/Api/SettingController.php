@@ -5,75 +5,34 @@ namespace Modules\Setting\Http\Controllers\Api;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Setting\Repository\Backend\SettingRepository;
 
 class SettingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
-    {
-        return view('setting::index');
+    protected $setting;
+    function __construct(SettingRepository $setting){
+        $this->setting = $setting;
+    }
+    public function update(Request $request){
+        $param['mini_alter_balance'] = $request->mini_alter_balance;
+        $param['tiket_price'] = $request->tiket_price;
+        $param['setting_start_time'] = $request->setting_start_time;
+        $param['setting_end_time'] = $request->setting_end_time;
+        $param['auto_win_price'] = $request->auto_win_price;
+        $param['win_price'] = $request->win_price;
+        $param['stop_booking_before'] = $request->stop_booking_before;
+        $param['win_quata'] = [];
+        
+        foreach($request->start_quata as $key=>$s_quata ){
+            $param['win_quata'][]=[
+                'start_quata'=>$s_quata,
+                'end_quata'=>$request->end_quata[$key],
+            ];
+        }
+        return $this->setting->save($param);
+    }
+    public function getSetting(){
+        return $this->setting->getSettingData();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('setting::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('setting::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('setting::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

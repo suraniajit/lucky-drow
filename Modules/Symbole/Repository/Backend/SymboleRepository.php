@@ -64,7 +64,6 @@ class SymboleRepository implements SymboleRepositoryInterface
 
     public function store($param){
         try {
-
                 DB::beginTransaction();
                 $symbole = new Symbole();
                 $image_param = [
@@ -97,9 +96,11 @@ class SymboleRepository implements SymboleRepositoryInterface
                 throw new \ErrorException('symbole not found');
             }
             $data = [
-                    'id'            => $symbole->id,
+                    'id'            =>  $symbole->id,
                     'name'          =>  $symbole->name,
-                    'status'        =>  $symbole->status,
+                    'file'          =>  asset($symbole->getSymbole($symbole->file)),
+                    'status'        =>  $symbole->getStatusText($symbole->status),
+                    'status_id'     =>  $symbole->status,
             ];
             return $this->successResponseArray($data, 'Successfully Get Show List!');
         }
@@ -117,6 +118,18 @@ class SymboleRepository implements SymboleRepositoryInterface
                 throw new \ErrorException('Symbole not found');
             }
             $data['name']= $param['symbole_name'];
+            if(isset($param['edit_symbole_file']) && $param['edit_symbole_file'] !='' ){
+                $image_param = [
+                    'file'=>$param['edit_symbole_file'],
+                    'path'=>$symbole->getSymbolePath(),
+                    'name'=>pathinfo($param['edit_symbole_file']->getClientOriginalName(),PATHINFO_FILENAME).date('_d_M_Y_h_i_s').'.'.$param['edit_symbole_file']->extension(),
+                ];
+                $image_name = uploadImage($image_param); 
+                if(file_exists(public_path($symbole->getSymbole($symbole->file)))){
+                    unlink(public_path($symbole->getSymbole($symbole->file)));
+                }
+                $data['file']= $image_name;;
+            }
             $data['status']= $param['status'];
             $row = $symbole->update($data);
              if($row){

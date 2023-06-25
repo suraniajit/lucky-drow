@@ -43,6 +43,14 @@ class AdminTableSeeder extends Seeder
             'admin.show.booking',
             'admin.show.result',
             'admin.show.history',
+            'admin.booking.index',
+            'admin.result.index',
+            'admin.result.history',
+            'admin.setting.update',
+            'admin.user.create',
+            'admin.user.edit',
+            'admin.user.delete',
+          
         ];
         //create admin user 
         $user = User::create([

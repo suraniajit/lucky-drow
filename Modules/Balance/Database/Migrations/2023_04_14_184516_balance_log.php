@@ -28,8 +28,9 @@ class BalanceLog extends Migration
             $table->decimal('after_amount', 8, 2)->nullable();
             $table->unsignedBigInteger('create_by');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('create_by')->references('id')->on('users')->onDelete('cascade');
+            $table->softDeletes();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('create_by')->references('id')->on('users');
         });
     }
 

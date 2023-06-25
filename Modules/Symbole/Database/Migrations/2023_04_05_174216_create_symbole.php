@@ -20,6 +20,7 @@ class CreateSymbole extends Migration
             $table->string('file');
             $table->enum('status',[Symbole::ENABLE , Symbole::DISABLE])->default(Symbole::ENABLE);          
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

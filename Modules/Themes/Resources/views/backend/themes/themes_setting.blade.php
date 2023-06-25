@@ -3,7 +3,7 @@
     {!! __('user::user/labels.user-page-title') !!}
 @endsection
 @section('page-title')    
-{!! __('user::user/labels.user-page-title') !!}
+{!! __('themes::user/labels.user-page-title') !!}
 @endsection
 @push('css-stack')
 @endpush

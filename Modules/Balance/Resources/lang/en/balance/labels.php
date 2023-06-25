@@ -24,7 +24,7 @@ return [
     'button_deposit_title'=>'Deposit',
     'deposit_person'=>'Deposit to',
     'deposit_OTP'=>'OTP',
-
+    'transaction_no'=>'Transaction No',
     'balance_withdrawal'=>'Withdrawal Balance',
     'withdrawal_person'=>   'Withdrawal From',
     'withdrawal_balance_amount'=>'Withdrawal Amount',

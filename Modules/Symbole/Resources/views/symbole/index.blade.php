@@ -140,6 +140,15 @@
                                     <input type="hidden" value="" name="id"  id="data-id">
                                     <input type="text" name="symbole_name" class="form-control" id="edit_symbole_name" placeholder="Please Enter Symbole Name">
                                 </div>
+                                <div class="form-group col-md-12">
+                                    <img class="file-upload-image edit_time_image" src="#" alt="your image" />
+                                    <br>
+                                    <label for="edit_banner_desc">Image</label>
+                                    <input class="form-control"  name="edit_symbole_file" type='file' accept="image/*" />
+                                    <div class=" error_div text-danger">
+                                        <div class="error"></div>
+                                    </div>
+                                </div>
                                 <div class="custom-control custom-switch ">
                                     <input type="checkbox" class="custom-control-input symbole_status" name="status" value="1" id="customSwitch_status">
                                     <label class="custom-control-label" for="customSwitch_status">{{ __('core::core/labels.gird-status') }}</label>
@@ -256,7 +265,7 @@
             });
             loadPageGrid();
         }
-        function getEditShow(e){
+        function getEditSymbole(e){
             id = $(e).attr('data-id');
             url = "{{ url('') }}" +'/api/symbole/edit/'+id;
             var token = window.localStorage.getItem('token'); 
@@ -277,8 +286,9 @@
                         $('.user_status').prop('checked', false);
                         $('#data-id').val(data.data.id);
                         $('#edit_symbole_name').val(data.data.name);
+                        $('.edit_time_image').attr("src",data.data.file);
                         $(".user_status").prop('checked', false);
-                        if(data.data.status==1){
+                        if(data.data.status_id==1){
                             $('#customSwitch_status').prop('checked', true);
                         }else{
                             $('#customSwitch_status').prop('checked', false);
@@ -340,23 +350,22 @@
                                                             '<label class="custom-control-label" for="customSwitch'+data.data[i].id+'"></label>'+
                                                         '</div>';
                                     action_str = action_str +''+status_button ;
-                                   {{--
+                                   
                                     edit_button = '';
-                                    var edit_button =   '<button type="button" onClick="getEditShow(this)" data-id="'+data.data[i].id+'" class="btn btn-info btn-sm" >'+
+                                    var edit_button =   '<button type="button" onClick="getEditSymbole(this)" data-id="'+data.data[i].id+'" class="btn btn-info btn-sm" >'+
                                                             '<i class="fa fa-pencil" aria-hidden="true"></i>'+
                                                         '</button>';
                                     action_str = action_str +''+edit_button ;
-                                   --}}
+                                   
                                 @endcan
                                 @can('admin.symbole.delete')
-                                   {{-- var delete_str = '<button type="button" onclick="deleteSymbole(this)" class="btn btn-danger btn-sm"  data-id="'+data.data[i].id+'">'+
+                                    var delete_str = '<button type="button" onclick="deleteSymbole(this)" class="btn btn-danger btn-sm"  data-id="'+data.data[i].id+'">'+
                                                         '<i class="fa fa-trash" aria-hidden="true"></i>'+
                                                     '</button>';
                                     action_str = action_str+''+ delete_str; 
-                                   --}}
+                                   
                                 @endcan
                                 action_str = action_str+'</div>'; 
-                                // if(){}
                                 clone.querySelector(".action").innerHTML = action_str;
                                 $(".grid-data").append(clone);
                             }
@@ -383,11 +392,25 @@
             });
         }
         $('#symbole_update').click(function(){
+
             var token = window.localStorage.getItem('token');     
+            var id = $('#data-id').val();
+            var data = new FormData();
+            //Form data
+            var form_data = $('#symbole_edit_form').serializeArray();
+            $.each(form_data, function (key, input) {
+                data.append(input.name, input.value);
+            });
+            if($('input[name="edit_symbole_file"]').val()!= ''){
+                var file_data = $('input[name="edit_symbole_file"]')[0].files;
+                    data.append("edit_symbole_file", file_data[0]);
+            }  
             $.ajax({
                 type: 'post',
                 url: "{{ url('') }}" +'/api/symbole/update',
-                data:$('#symbole_edit_form').serialize(),
+                data:data,
+                processData: false, 
+                contentType: false,
                 headers: {
                     'Authorization': 'Bearer ' ,
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),

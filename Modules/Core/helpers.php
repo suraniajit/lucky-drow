@@ -2,7 +2,8 @@
 
 use Modules\Core\Http\Help\Module;
 use Illuminate\Support\Facades\Session;
-// use Modules\Contactus\Entities\ContactUs;
+use Modules\Setting\Entities\Setting;
+
 
 
 if (!function_exists('getModuleList')) {
@@ -12,6 +13,14 @@ if (!function_exists('getModuleList')) {
         return $module->getModules();
     }
 }
+if (!function_exists('getSetting')) {
+    function getSetting($key)
+    {
+       $setting_data = Setting::pluck('value','key')->toArray();
+       return (isset($setting_data[$key]))?json_decode($setting_data[$key]):null;
+    }
+}
+
 if (!function_exists('getMenuList')) {
     function getMenuList()
     {

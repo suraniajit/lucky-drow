@@ -3,9 +3,10 @@
 namespace Modules\Show\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Show extends Model
 {
+    use SoftDeletes;
     const ENABLE = 1;
     const DISABLE = 2;
     const ENABLE_TEXT = 'Enable';

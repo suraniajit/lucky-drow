@@ -30,38 +30,33 @@ Route::prefix('balance')->group(function() {
         'middleware' => 'able:admin.balance.index'
     ]);
 
-    // Route::post('/filters', [
-    //     'as' => 'api.balance.filters',
-    //     'uses' => 'BalanceController@filters',
-    //     'middleware' => 'able:admin.balance.filters'
-    // ]);
     Route::post('/deposit_request', [
         'as' => 'api.balance.deposit_request',
         'uses' => 'BalanceController@depositRequest',
-        'middleware' => 'able:admin.balance.deposit_request'
+        'middleware' => 'able:admin.balance.deposit'
     ]);
     Route::post('/deposit_otp_varify', [
         'as' => 'api.balance.deposit_otp_varify',
         'uses' => 'BalanceController@depositOTPVarify',
-        'middleware' => 'able:admin.balance.deposit_otp_varify'
+        'middleware' => 'able:admin.balance.deposit'
     ]);
     Route::post('/withdrawal_request', [
         'as' => 'api.balance.withdrawal_request',
         'uses' => 'BalanceController@withdrawalRequest',
-        'middleware' => 'able:admin.balance.withdrawal_request'
+        'middleware' => 'able:admin.balance.withdrawal'
     ]);
     Route::post('/withdrawal_otp_varify', [
         'as' => 'api.balance.withdrawal_otp_varify',
         'uses' => 'BalanceController@withdrawalOTPVarify',
-        'middleware' => 'able:admin.balance.withdrawal_otp_varify'
+        'middleware' => 'able:admin.balance.withdrawal'
     ]);
     Route::get('/transaction/{user_id}', [
         'as' => 'api.balance.transaction',
         'uses' => 'BalanceTransactionController@index',
-        'middleware' => 'able:admin.balance-transaction.all-users'
+        'middleware' => 'able:admin.balance.history'
     ]);
     // own transaction
-    // Route::get('/transaction/{user_id}', [
+    // Route::get('/my_transaction', [
     //     'as' => 'api.balance.transaction',
     //     'uses' => 'BalanceTransactionController@index',
     //     'middleware' => 'able:admin.balance-transaction.all-user'

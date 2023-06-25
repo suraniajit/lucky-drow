@@ -16,7 +16,7 @@ $('#withdrawal_request').click(function(){
         type: 'post',
         url: withdrawal_request_url,
         data:{
-            user_id : user_id,
+            withdrawal_user_id : user_id,
             withdrawal_amount:withdrawal_amount
         },
         headers: {

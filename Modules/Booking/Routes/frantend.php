@@ -15,6 +15,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+/*
 Route::prefix('booking')->group(function() {
     Route::get('/', [
         'as' => 'user.booking.index',
@@ -69,3 +70,4 @@ Route::prefix('booking')->group(function() {
         'middleware' => 'can:user.booking.edit'
     ]);
 });
+*/

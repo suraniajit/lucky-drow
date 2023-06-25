@@ -24,6 +24,7 @@ class CreateShowsTable extends Migration
             $table->date('end_date');
             $table->enum('status',array_keys($show->allStatus()));
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

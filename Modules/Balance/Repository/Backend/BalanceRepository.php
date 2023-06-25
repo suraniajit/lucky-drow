@@ -11,6 +11,9 @@ use Modules\Balance\Entities\Balance;
 use Modules\Balance\Entities\BalanceTransaction;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Modules\Balance\Jobs\SendOtpForDipositMailJob;
+use Modules\Balance\Jobs\SendOtpForWithdrawalMailJob;
+use Mail;
 
 class BalanceRepository implements BalanceRepositoryInterface
 {
@@ -64,7 +67,7 @@ class BalanceRepository implements BalanceRepositoryInterface
             $transactionNo =getTransactionNo();
             $transaction = new BalanceTransaction();
             $transaction->transaction_id = $transactionNo;
-            $transaction->user_id = $request->user_id;
+            $transaction->user_id = $request->deposit_user_id;
             $transaction->type = BalanceTransaction::DEPOSIT;
             $transaction->amount = $request->deposit_amount;
             $transaction->status = BalanceTransaction::PENDING;
@@ -74,9 +77,22 @@ class BalanceRepository implements BalanceRepositoryInterface
             $transaction->after_amount = null;
             $transaction->create_by  = Auth::id();
             $transaction->save();
+            $beneficial = User::where('id',$request->deposit_user_id)->first();
             $data = [
                 'transaction'=>$transactionNo,
             ];
+            // mail sending request
+            dispatch(
+                new SendOtpForDipositMailJob([
+                    'otp'=>$otp,
+                    'subject'=>'Deposit Request For ₹'.$request->deposit_amount." to ".$beneficial->name,
+                    'amount'=>$request->deposit_amount,
+                    'transaction_no'=>$transactionNo,
+                    'beneficial_name'=>$beneficial->name,
+                    'beneficial_mail'=>$beneficial->email
+                    ])
+                );
+                // end mail sending request
             return $this->successResponseArray($data, 'Successfully Send Deposit Request!');
         }
         catch (Exception $e) {
@@ -87,10 +103,12 @@ class BalanceRepository implements BalanceRepositoryInterface
     public function depositOTPVarify(Request $request){
         try {
             $otp = trim($request->deposit_otp);
+            $transaction_id = trim($request->deposit_transaction_no);
+            
             DB::beginTransaction();
             $transaction = new BalanceTransaction();
             $transaction = $transaction
-                        ->where('transaction_id',$request->transaction_no)
+                        ->where('transaction_id',$transaction_id)
                         ->where('status',BalanceTransaction::PENDING)
                         ->first();
             if(!$transaction){
@@ -137,7 +155,7 @@ class BalanceRepository implements BalanceRepositoryInterface
             $transactionNo = getTransactionNo();
             $transaction = new BalanceTransaction();
             $transaction->transaction_id = $transactionNo;
-            $transaction->user_id = $request->user_id;
+            $transaction->user_id = $request->withdrawal_user_id;
             $transaction->type = BalanceTransaction::WITHDRAWAL;
             $transaction->amount = $request->withdrawal_amount;
             $transaction->status = BalanceTransaction::PENDING;
@@ -150,6 +168,18 @@ class BalanceRepository implements BalanceRepositoryInterface
             $data = [
                 'transaction'=>$transactionNo,
             ];
+            $beneficial = User::where('id',$request->withdrawal_user_id)->first();
+           
+            dispatch(
+                new SendOtpForWithdrawalMailJob([
+                    'otp'=>$otp,
+                    'subject'=>'Withdrawal Request For ₹'.$request->withdrawal_amount." to ".$beneficial->name,
+                    'amount'=>$request->withdrawal_amount,
+                    'transaction_no'=>$transactionNo,
+                    'beneficial_name'=>$beneficial->name,
+                    'beneficial_mail'=>$beneficial->email
+                    ])
+                );
             return $this->successResponseArray($data, 'Successfully Send Withdrawal Request !');
         }
         catch (Exception $e) {

@@ -3,21 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens,Notifiable,HasRoles,SoftDeletes;
     const ACTIVE =  1;
     const DEACTIVE = 2;
     const ACTIVE_TEXT = 'Active';
     const DEACTIVE_TEXT = 'Deactive';
-    
-
     
     /**
      * The attributes that are mass assignable.

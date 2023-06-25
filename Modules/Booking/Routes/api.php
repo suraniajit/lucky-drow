@@ -23,45 +23,5 @@ Route::prefix('booking')->group(function() {
         'middleware' => 'able:admin.booking.index'
     ]);
 
-    Route::post('/filters', [
-        'as' => 'api.booking.filters',
-        'uses' => 'bookingController@filters',
-        'middleware' => 'able:admin.booking.filters'
-    ]);
-
-
-    Route::post('/save', [
-        'as' => 'api.booking.store',
-        'uses' => 'bookingController@store',
-        'middleware' => 'able:admin.booking.create'
-    ]);
-
-    Route::get('/edit/{id}', [
-        'as' => 'api.booking.edit',
-        'uses' => 'bookingController@edit',
-        'middleware' => 'able:admin.booking.edit'
-    ]);
-
-    Route::put('/{id}', [
-        'as' => 'api.booking.update',
-        'uses' => 'bookingController@update',
-        'middleware' => 'able:admin.booking.edit'
-    ]);
-
-    Route::delete('/delete/{id}', [
-        'as' => 'api.booking.delete',
-        'uses' => 'bookingController@delete',
-        'middleware' => 'able:admin.booking.delete'
-    ]);
-
-    Route::delete('/massDelete', [
-        'as' => 'api.booking.mass_delete',
-        'uses' => 'bookingController@massDelete',
-        'middleware' => 'able:admin.booking.mass_delete'
-    ]);
-    Route::post('/update_status', [
-        'as' => 'api.booking.update_status',
-        'uses' => 'bookingController@updateStatus',
-        'middleware' => 'able:admin.booking.edit'
-    ]);
+  
 });

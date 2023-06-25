@@ -69,24 +69,41 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="input_name">{!! __('balance::balance/labels.deposit_person') !!}</label>
-                                    <input type="text" disabled id="deposit_person" class="form-control">
+                                    <input type="text" disabled   name="deposit_user_id" id="deposit_person" class="form-control">
                                     <input type="hidden" id="deposit_person_id" class="form-control">
-                                    <input type="hidden" id="transaction_no" class="form-control">
+                                </div>
+                                <div class=" error_div text-danger">
+                                    <div class="error"></div>
                                 </div>
                             </div>
+                            <div class="form-row" id="deposit_transaction_no_div" style="display:none;">
+                                <div class="form-group col-md-12">
+                                    <label for="input_name">{!! __('balance::balance/labels.transaction_no') !!}</label>
+                                    <input type="text" disabled name="deposit_transaction_no" id="deposit_transaction_no" class="form-control">
+                                </div>
+                                <div class=" error_div text-danger">
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="input_name">{!! __('balance::balance/labels.balance_amount') !!}</label>
                                     <input type="text" name="deposit_amount" id="deposit_amount" class="form-control" placeholder="{!! __('balance::balance/labels.form-placeolder-deposit-amount') !!}">
                                 </div>
+                                <div class=" error_div text-danger">
+                                    <div class="error"></div>
+                                </div>
                             </div>
                             <div class="form-row" id="otp_form_group" style="display:none;">
                                 <div class="form-group col-md-12">
                                     <label for="input_name">{!! __('balance::balance/labels.deposit_OTP') !!}</label>
-                                    <input type="text"  id="deposit_otp" class="form-control" placeholder="{!! __('balance::balance/labels.form-placeolder-deposit-otp') !!}">
+                                    <input type="text"  id="deposit_otp" name="deposit_otp" class="form-control" placeholder="{!! __('balance::balance/labels.form-placeolder-deposit-otp') !!}">
+                                </div>
+                                <div class=" error_div text-danger">
+                                    <div class="error"></div>
                                 </div>
                             </div>
-                            
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -113,24 +130,40 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="input_name">{!! __('balance::balance/labels.withdrawal_person') !!}</label>
-                                    <input type="text" disabled id="withdrawal_person" class="form-control">
+                                    <input type="text" name="user" disabled id="withdrawal_person" class="form-control">
                                     <input type="hidden" id="withdrawal_person_id" >
-                                    <input type="hidden" id="withdrawal_transaction_no">
+                                </div>
+                                <div class=" error_div text-danger">
+                                    <div class="error"></div>
                                 </div>
                             </div>
-                            <div class="form-row">
+                           <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="input_name">{!! __('balance::balance/labels.withdrawal_balance_amount') !!}</label>
                                     <input type="text" name="withdrawal_amount" id="withdrawal_amount" class="form-control" placeholder="{!! __('balance::balance/labels.form-placeolder-withdrawal-amount') !!}">
+                                </div>
+                                <div class=" error_div text-danger">
+                                    <div class="error"></div>
+                                </div>
+                            </div>
+                            <div class="form-row" id="transaction_no_div" style="display:none;">
+                                <div class="form-group col-md-12">
+                                    <label for="input_name">{!! __('balance::balance/labels.transaction_no') !!}</label>
+                                    <input type="text" disabled name="withdrawal_transaction_no" id="withdrawal_transaction_no" class="form-control">
+                                </div>
+                                <div class=" error_div text-danger">
+                                    <div class="error"></div>
                                 </div>
                             </div>
                             <div class="form-row" id="withdrawal_otp_form_group" style="display:none;">
                                 <div class="form-group col-md-12">
                                     <label for="input_name">{!! __('balance::balance/labels.withdrawal_OTP') !!}</label>
-                                    <input type="text"  id="withdrawal_otp" class="form-control" placeholder="{!! __('balance::balance/labels.form-placeolder-withdrawal-otp') !!}">
+                                    <input type="text" name="otp"  id="withdrawal_otp" class="form-control" placeholder="{!! __('balance::balance/labels.form-placeolder-withdrawal-otp') !!}">
+                                </div>
+                                <div class=" error_div text-danger">
+                                    <div class="error"></div>
                                 </div>
                             </div>
-                            
                         </form>
                     </div>
                     <div class="modal-footer">

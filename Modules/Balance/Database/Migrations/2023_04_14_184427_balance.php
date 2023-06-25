@@ -18,7 +18,8 @@ class Balance extends Migration
             $table->unsignedBigInteger('user_id')->unique();
             $table->decimal('balance', 8, 2);
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->softDeletes();
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

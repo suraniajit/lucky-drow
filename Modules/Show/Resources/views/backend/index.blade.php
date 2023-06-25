@@ -185,7 +185,6 @@
         });
         $('#show_update').click(function(){
             var token = window.localStorage.getItem('token');
-                
             $.ajax({
                 type: 'post',
                 url: "{{ url('') }}" +'/api/show/update',

@@ -21,10 +21,10 @@ class CreateAPIAuthentication extends Migration
             $table->timestamp('login_time')->useCurrent();
             $table->timestamp('logout_time')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('user_id')
                 ->references('id') // permission id
-                ->on('users')
-                ->onDelete('cascade');
+                ->on('users');
         });
     }
 
