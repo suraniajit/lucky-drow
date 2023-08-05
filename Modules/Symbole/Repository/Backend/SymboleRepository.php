@@ -42,6 +42,9 @@ class SymboleRepository implements SymboleRepositoryInterface
     
     public function updateStatus($param){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             DB::beginTransaction();
             $symbole = Symbole::find($param['id']);
             if(!$symbole){
@@ -64,6 +67,9 @@ class SymboleRepository implements SymboleRepositoryInterface
 
     public function store($param){
         try {
+                if(!isOpenForSetting()){
+                    return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+                }
                 DB::beginTransaction();
                 $symbole = new Symbole();
                 $image_param = [
@@ -112,6 +118,9 @@ class SymboleRepository implements SymboleRepositoryInterface
     
     public function update($param){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             DB::beginTransaction();
             $symbole = Symbole::find($param['id']);
             if(!$symbole){
@@ -148,6 +157,9 @@ class SymboleRepository implements SymboleRepositoryInterface
 
     public function distroy($id){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             DB::beginTransaction();
             $symbole = Symbole::find($id);
             if(!$symbole){
@@ -164,6 +176,29 @@ class SymboleRepository implements SymboleRepositoryInterface
         }
         catch (Exception $e) {
              DB::rollback();
+            return $this->errorResponse();
+        }
+    }
+    public function getBookingSymboleList(){
+        try {
+            $data=[];
+            $symboles =  Symbole::where('status',Symbole::ENABLE);
+            $symboles = $symboles->orderBy('id','DESC')->get();
+            $price = getSetting('tiket_price');
+            if($symboles){
+                foreach($symboles as $symbole){
+                    $data[]=[
+                        'id'            => $symbole->id,
+                        'name'          => $symbole->name,
+                        'file'          => asset($symbole->getSymbole($symbole->file)),
+                        'price'         => $price,
+                    ];
+                }
+                return $this->successResponseArray($data, 'Successfully Get Symbole List!');
+            }
+            return $this->errorResponse();
+        }
+        catch (Exception $e) {
             return $this->errorResponse();
         }
     }

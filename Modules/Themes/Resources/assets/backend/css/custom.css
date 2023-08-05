@@ -18,3 +18,12 @@ a.clickable-custom-link :hover {
     height: 21px;
     margin-right: 9px;
 }
+.booking_symbole_div {
+    border: 1px solid;
+    margin: auto;
+    /* width: 50%; */
+    padding: 10px;
+}
+.symbole_label{
+    margin-top:30%
+}

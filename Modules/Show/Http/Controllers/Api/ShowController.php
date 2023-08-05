@@ -13,6 +13,10 @@ class ShowController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    protected $showRepository; 
+    function __construct(){
+        $this->showRepository = new ShowRepository();
+    }
     public function index(Request $request)
     {
         $showRepository = new ShowRepository();
@@ -83,5 +87,8 @@ class ShowController extends Controller
     {
         $showRepository = new ShowRepository();
         return $showRepository->distroy($id);
+    }
+    public function getBookingShowList(){
+        return $this->showRepository->getBookingShowList();
     }
 }

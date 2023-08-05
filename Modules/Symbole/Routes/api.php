@@ -19,49 +19,54 @@ use Illuminate\Http\Request;
 Route::prefix('symbole')->group(function() {
     Route::get('/', [
         'as' => 'api.symbole.index',
-        'uses' => 'symboleController@index',
+        'uses' => 'SymboleController@index',
         'middleware' => 'able:admin.symbole.index'
     ]);
 
     Route::post('/filters', [
         'as' => 'api.symbole.filters',
-        'uses' => 'symboleController@filters',
+        'uses' => 'SymboleController@filters',
         'middleware' => 'able:admin.symbole.filters'
     ]);
 
 
     Route::post('/save', [
         'as' => 'api.symbole.store',
-        'uses' => 'symboleController@store',
+        'uses' => 'SymboleController@store',
         'middleware' => 'able:admin.symbole.create'
     ]);
 
     Route::get('/edit/{id}', [
         'as' => 'api.symbole.edit',
-        'uses' => 'symboleController@edit',
+        'uses' => 'SymboleController@edit',
         'middleware' => 'able:admin.symbole.edit'
     ]);
 
     Route::post('/update', [
         'as' => 'api.symbole.update',
-        'uses' => 'symboleController@update',
+        'uses' => 'SymboleController@update',
         'middleware' => 'able:admin.symbole.edit'
     ]);
 
     Route::post('/delete/{id}', [
         'as' => 'api.symbole.delete',
-        'uses' => 'symboleController@delete',
+        'uses' => 'SymboleController@delete',
         'middleware' => 'able:admin.symbole.delete'
     ]);
 
     Route::delete('/massDelete', [
         'as' => 'api.symbole.mass_delete',
-        'uses' => 'symboleController@massDelete',
+        'uses' => 'SymboleController@massDelete',
         'middleware' => 'able:admin.symbole.mass_delete'
     ]);
     Route::post('/update_status', [
         'as' => 'api.symbole.update_status',
-        'uses' => 'symboleController@updateStatus',
+        'uses' => 'SymboleController@updateStatus',
         'middleware' => 'able:admin.symbole.edit'
     ]);
 });
+Route::get('/booking/symbole_list', [
+    'as' => 'admin.booking.show_list',
+    'uses' => 'SymboleController@getBookingSymboleList',
+    'middleware' => 'able:admin.symbole.index'
+]);

@@ -20,11 +20,11 @@ class ShowRepository implements ShowRepositoryInterface
                     $data[]=[
                         'id'            => $show->id,
                         'name'          =>  $show->show_name,
-                        'time'          =>  $show->show_time,
+                        'time'          =>  date('h:i A',strtotime($show->show_time)),
                         'start_date'    =>  $show->start_date,
                         'end_date'      =>  $show->end_date,
                         'status'        =>  $show->getStatus($show->status),
-                        'status_id'        =>  $show->status,
+                        'status_id'     =>  $show->status,
                     ];
                 }
                 return $this->successResponseArray($data, 'Successfully Get Show List!',null,['link'=>$this->ajaxPaginateLink($shows)]);
@@ -38,6 +38,9 @@ class ShowRepository implements ShowRepositoryInterface
 
     public function store($param){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             $show = Show::create([
                 'show_name'     =>  $param['show_name'],
                 'show_time'     =>  $param['show_time'],
@@ -57,6 +60,9 @@ class ShowRepository implements ShowRepositoryInterface
     }
     public function updateStatus($param){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             $show = Show::find($param['id']);
             if(!$show){
                 throw new \ErrorException('Show not found');
@@ -74,6 +80,9 @@ class ShowRepository implements ShowRepositoryInterface
     }
     public function distroy($id){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             $show = Show::find($id);
             if(!$show){
                 throw new \ErrorException('Show not found');
@@ -90,6 +99,7 @@ class ShowRepository implements ShowRepositoryInterface
     }
     public function getEditData($id){
         try {
+            
             $show = Show::find($id);
             if(!$show){
                 throw new \ErrorException('Show not found');
@@ -113,6 +123,9 @@ class ShowRepository implements ShowRepositoryInterface
     }   
     public function update($param){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             $show = Show::find($param['id']);
             if(!$show){
                 throw new \ErrorException('Show not found');
@@ -133,5 +146,31 @@ class ShowRepository implements ShowRepositoryInterface
         catch (Exception $e) {
             return $this->errorResponse();
         }    
+    }
+    public function getBookingShowList(){
+        try {
+            $data=[];
+            $shows =  Show::where('show_time','>=',date('H:i:s',strtotime('+'.getSetting('stop_booking_before').'minute')))
+                    ->where('status',Show::ENABLE)
+                    ->where('start_date','<=',date('Y-m-d'))
+                    ->where('end_date','>=',date('Y-m-d'))
+                    ->whereRaw('json_contains(show_day, \'["'.date('N').'"]\')')
+                    ->orderBy('show_time','DESC')
+                    ->get();
+           
+            if($shows){
+                foreach($shows as $show){
+                    $data[]=[
+                        'id'            => $show->id,
+                        'time'          =>  date('h:i A',strtotime($show->show_time)),
+                    ];
+                }
+                return $this->successResponseArray($data, 'Successfully Get Show List!');
+            }
+            return $this->errorResponse();
+        }
+        catch (Exception $e) {
+            return $this->errorResponse();
+        }
     }
 }

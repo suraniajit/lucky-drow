@@ -145,3 +145,14 @@ if (!function_exists('getDays')) {
         ];
     }
 }
+
+if (!function_exists('isOpenForSetting')) {
+    function isOpenForSetting()
+    {   
+        if( (date('Hi',strtotime(getSetting('setting_start_time').':00')) <= date('Hi')) && (date('Hi',strtotime(getSetting('setting_end_time').':00')) >= date('Hi')) ){
+            return true;
+        }
+        return false;
+    }
+}
+

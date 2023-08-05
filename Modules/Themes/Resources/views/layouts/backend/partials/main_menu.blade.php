@@ -153,7 +153,7 @@
                 @endforeach
             @endif
         </nav>
-    @if(!auth()->user()->hasRole(config('core.super-admin')))
+    @if(!auth()->user()->hasRole(config('core.main-admin')))
         <div class="card">
             <div class="card-body">
                 <div class="card-title">

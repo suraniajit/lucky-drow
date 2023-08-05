@@ -64,4 +64,11 @@ Route::prefix('show')->group(function() {
         'middleware' => 'able:admin.show.mass_delete'
     ]);
     
+  
+
 });
+Route::get('/booking/show_list', [
+    'as' => 'admin.booking.show_list',
+    'uses' => 'showController@getBookingShowList',
+    'middleware' => 'able:admin.booking.show_list'
+]);

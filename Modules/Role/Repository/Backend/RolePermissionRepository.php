@@ -45,6 +45,9 @@ class RolePermissionRepository implements RolePermissionInterface
     
     public function changePermissionStatus($roleName,$permission,$flag){
         try {
+                if(!isOpenForSetting()){
+                    return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+                }
                 $role = Role::where('name',$roleName)->first();
                 if(!$role){
                     throw new \ErrorException('role not found');

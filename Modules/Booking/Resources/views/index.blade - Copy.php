@@ -78,22 +78,26 @@
         </tr>            
     </template>
     <template id="tiket-row-template">
-        <div class="form-row booking_symbole_div symbole_row ">
-            <div class="form-group col-md-3">
-                <img src=""  class=" symbole_image" width="100">
-                <input type="hidden" name="symbole_id[]" class="symbole_id_hidden_val" >                                
+        <div class="form-row symbole_row">
+            <div class="form-group col-md-6">
+                <label >{!! __('booking::booking/labels.booking_symbole') !!}</label>
+                <select class="form-control symbole"  name="symbole[]">
+                    <option></option>
+                </select>
             </div>
-            <div class="form-group col-md-3">
-                <label class="symbole_label"></label>
-                <input type="hidden" class="symbole_price" >                                
-            </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <label >{!! __('booking::booking/labels.booking_count') !!}</label>
-                <input type="number" min=0  name="symbole_booking_count[]" class="form-control symbole_booking_count " onchange="changeSymboleCount(this);"  value="0">                                
+                <input type="number" min=1 name="count" class="form-control " value="1">                                
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <label >{!! __('booking::booking/labels.booking_total') !!}</label>
-                <input type="number"  value="0" class="form-control symbole_booking_count_total" disabled>                                
+                <input type="text" name="mobile" class="form-control " disabled>                                
+            </div>
+            <div class="col-md-2">
+                <label > Action</label>
+                <button type="button" onclick="removeRow(this)"  class="form-control btn btn-block bg-gradient-danger">
+                    <i class="fa fa-trash"></i>
+                </button>
             </div>
         </div>         
     </template>
@@ -124,7 +128,30 @@
                                 </div>
                             </div>
                             <div id="tiket_detail"> 
-                                
+                                <div class="form-row symbole_row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">{!! __('booking::booking/labels.booking_symbole') !!}</label>
+                                        <select class="form-control symbole" id="first_symbole_option"  name="symbole[]">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="inputEmail4">{!! __('booking::booking/labels.booking_count') !!}</label>
+                                        <input type="number" min=1 name="count" class="form-control " value="1">                                
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="inputEmail4">{!! __('booking::booking/labels.booking_total') !!}</label>
+                                        <input type="text" name="mobile" class="form-control " disabled>                                
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                    <div class="col-md-10">
+                                        &nbsp;
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" id="add_booking_row"  class="btn btn-block bg-gradient-primary">+</button>
+                                    </div>
                             </div>
                             <hr>
                             <div class="form-row">
@@ -132,7 +159,7 @@
                                     <label for="inputEmail4">Total</label>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <input type="text" disabled id="final_total" value="0">                                
+                                    <input type="text" disabled value="100">                                
                                 </div>
                             </div>
                             
@@ -140,7 +167,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">{!! __('core::core/labels.core-form-button-close') !!}</button>
-                        <button type="button" class="btn btn-primary" id="book_submit">{!! __('core::core/labels.core-form-button-save') !!}</button>
+                        <button type="button" class="btn btn-primary" id="show_submit">{!! __('core::core/labels.core-form-button-save') !!}</button>
                     </div>
                 </div>
             </div>
@@ -153,6 +180,14 @@
         $( document ).ready(function() {
             loadPageGrid();
         });
+        $('#add_booking_row').click(function(){
+            const templ = document.getElementById("tiket-row-template");
+            const clone = templ.content.cloneNode(true);
+            $("#tiket_detail").append(clone);
+        });
+        function removeRow(btn){
+            $(btn).parent().parent().remove()
+        }
 </script>
 <script>
     function loadPageGrid(e){
@@ -240,9 +275,7 @@ $('#add_booking_button').click(function (){
                 clientsecret: " ",
                 'APIAuthKey':token,
             },
-            beforeSend: function() {
-                $('#final_total').val(0);  
-            },
+            beforeSend: function() {},
             success: function(data) {
                 if (data.status == 'Success') {
                     var option_string ='';
@@ -269,17 +302,24 @@ $('#add_booking_button').click(function (){
                 });
             },
         });
-        getSymbole();
+        var element = $('#first_symbole_option');
+        getSymbole(element);
        
 });
+$('.symbole').change(function(e){
+    getSymbole($(this).parent().parent().next().find('.symbole'),[]);
+    // $(this).parent().parent().next().find('.symbole').html("<option>aa</option>")
 
+});
 
-function getSymbole(){
+function getSymbole(element,already_selected=[]){
     var token = window.localStorage.getItem('token'); 
     $.ajax({
-        type: 'get',
+        type: 'post',
         url: "{{ url('') }}" +'/api/booking/symbole_list',
-        data: {},
+        data: {
+            'already_selected_syboles':already_selected,
+        },
         headers: {
             'Authorization': 'Bearer ' ,
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -290,20 +330,7 @@ function getSymbole(){
         beforeSend: function() {},
         success: function(data) {
             if (data.status == 'Success') {
-
-                
-                if(data.data.length>0){
-                    $("#tiket_detail").html('');
-                    const templ = document.getElementById("tiket-row-template");
-                    for (i = 0; i < data.data.length; i++) {
-                        const clone = templ.content.cloneNode(true);
-                        clone.querySelector(".symbole_image").setAttribute('src',data.data[i].file);
-                        clone.querySelector(".symbole_id_hidden_val").setAttribute('value',data.data[i].id);
-                        clone.querySelector(".symbole_label").innerHTML =data.data[i].name;
-                        clone.querySelector(".symbole_price").setAttribute('value',data.data[i].price);
-                        $('#tiket_detail').append(clone);   
-                    }
-                }
+                setSymboleElement(data,element);
             }else{
                 Swal.fire({
                     icon: 'error',
@@ -324,58 +351,13 @@ function getSymbole(){
         },
     });
 }
-function changeSymboleCount(event){
-    var row = $(event).parent().parent();
-    var tiket_price = row.find('.symbole_price').val();
-    var tiket_count = $(event).val();
-    row.find('.symbole_booking_count_total').val(tiket_price * tiket_count);
-    var total = parseInt($('#final_total').val()) + parseInt(tiket_price * tiket_count);
-    $('#final_total').val(total);
+function setSymboleElement(data,element){
+    var option_string ='';
+    for (i = 0; i < data.data.length; i++) {
+        option_string = option_string + '<option value="'+data.data[i].id+'">'+data.data[i].name+'</option>';
+    }
+    element.html(option_string);
 }
-$('#book_submit').click(function(){
-    var token = window.localStorage.getItem('token'); 
-    $.ajax({
-            type: 'post',
-            url: "{{ url('') }}" +'/api/booking/get_confirmation_model',
-            data: {},
-            headers: {
-                'Authorization': 'Bearer ' ,
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                clientid: " ",
-                clientsecret: " ",
-                'APIAuthKey':token,
-            },
-            beforeSend: function() {},
-            success: function(data) {
-                if (data.status == 'Success') {
-                    console.log();
-                    /*
-                    var option_string ='';
-                    for (i = 0; i < data.data.length; i++) {
-                        option_string = option_string + '<option value="'+data.data[i].id+'">'+data.data[i].time+'</option>';
-                    }
-                    $('#show_id').html(option_string);
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        text: 'Something Went To Wrong',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                }
-                */
-            },
-            error: function(data) {
-                Swal.fire({
-                        icon: 'error',
-                        text: 'Something went wrong!',
-                        showConfirmButton: false,
-                        timer: 1500
-                });
-            },
-        });
-       
 
-});
 </script>
 @endpush

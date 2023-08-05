@@ -22,6 +22,11 @@ Route::prefix('booking')->group(function() {
         'uses' => 'bookingController@index',
         'middleware' => 'able:admin.booking.index'
     ]);
-
-  
+    Route::get('/get_confirmation_model', [
+        'as' => 'api.booking.get_confirmation_model',
+        'uses' => 'bookingController@getConfirmationModel',
+        'middleware' => 'able:admin.booking.create'
+    ]);
+    
+    
 });

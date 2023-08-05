@@ -5,6 +5,7 @@ return [
     'name' => 'Core',
     'super-admin'=>'super-admin',
     'main-admin'=>['super-admin','admin'],
+    
     'default_image'=>'modules\themes\frontend\image\No_image_available.svg.webp',
     'stubs' => [
         'enabled' => false,

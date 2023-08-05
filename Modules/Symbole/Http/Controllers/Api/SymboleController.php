@@ -9,6 +9,7 @@ use Modules\Symbole\Repository\Backend\SymboleRepository;
 
 class SymboleController extends Controller
 {
+
     public function index(Request $request)
     {
         $symbole_repository = new SymboleRepository();
@@ -52,4 +53,11 @@ class SymboleController extends Controller
         $response =  $symbole_repository->distroy($id);
         return $response;
     }
+    public function getBookingSymboleList()
+    {
+        $symbole_repository = new SymboleRepository();
+        $response =  $symbole_repository->getBookingSymboleList();
+        return $response;
+    }
+    
 }

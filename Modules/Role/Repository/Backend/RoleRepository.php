@@ -34,6 +34,9 @@ class RoleRepository implements RoleInterface
 
     public function store($param){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             $role = Role::create(['name' =>$param['name']]);
             if($role){
                 return $this->successResponse(NULL, 'Role Successfully add!');

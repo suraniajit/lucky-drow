@@ -36,6 +36,9 @@ class PermissionRepository implements PermissionInterface
     
     public function store($param){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             $permission = Permission::create(['name' =>$param['name']]);
             if($permission){
                 $role = Role::where('name',config('core.super-admin'))->first();
@@ -51,6 +54,9 @@ class PermissionRepository implements PermissionInterface
 
     public function distroy($id){
         try {
+            if(!isOpenForSetting()){
+                return $this->errorResponseArray('server update time '.getSetting('setting_start_time'). ' to '.getSetting('setting_end_time'));
+            }
             $permissionsdata = Permission::where('id',$id)->first();
             if($permissionsdata){
                 Permission::where('id',$id)->delete();
