@@ -19,4 +19,7 @@ class BookingController extends Controller
     {
         return $this->booking->getBooking();
     }
+    public function saveBooking(Request $request){
+        return $this->booking->saveBooking($request->all());
+    }
 }

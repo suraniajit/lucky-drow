@@ -5,10 +5,10 @@ namespace Modules\Booking\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class booking_detail extends Model
+class BookingDetail extends Model
 {
     use SoftDeletes;
-
+    protected $table = 'booking_details';
     protected $fillable = [
         'booking_id',
         'sysmbol_id',

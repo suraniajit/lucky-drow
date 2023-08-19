@@ -108,7 +108,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="show_form">
+                        <form id="book_form">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="inputEmail4">{!! __('booking::booking/labels.booking-show') !!}</label>
@@ -124,7 +124,6 @@
                                 </div>
                             </div>
                             <div id="tiket_detail"> 
-                                
                             </div>
                             <hr>
                             <div class="form-row">
@@ -134,8 +133,7 @@
                                 <div class="form-group col-md-6">
                                     <input type="text" disabled id="final_total" value="0">                                
                                 </div>
-                            </div>
-                            
+                            </div>                         
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -328,54 +326,66 @@ function changeSymboleCount(event){
     var row = $(event).parent().parent();
     var tiket_price = row.find('.symbole_price').val();
     var tiket_count = $(event).val();
+    $('#final_total').val(0);
     row.find('.symbole_booking_count_total').val(tiket_price * tiket_count);
-    var total = parseInt($('#final_total').val()) + parseInt(tiket_price * tiket_count);
-    $('#final_total').val(total);
+    var all_item = $(".symbole_booking_count_total" );
+    all_item.each(function(i,obj){
+        var total = parseInt($('#final_total').val()) + parseInt($(obj).val());
+        $('#final_total').val(total);
+    });
 }
+
 $('#book_submit').click(function(){
+    swal({
+        title: "Are you sure?",
+        text: "Once place Order , You Not Able To Change And Delete It!",
+        type: "warning",
+        showCancelButton: true,
+        // confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Confirm!",
+    }).then(result => {
+        if (result.value) {
+            booking();
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+            swal("Cancelled", "Something went wrong", "error"); 
+        }
+        
+    });
+});
+function booking(){
     var token = window.localStorage.getItem('token'); 
     $.ajax({
-            type: 'post',
-            url: "{{ url('') }}" +'/api/booking/get_confirmation_model',
-            data: {},
-            headers: {
-                'Authorization': 'Bearer ' ,
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                clientid: " ",
-                clientsecret: " ",
-                'APIAuthKey':token,
-            },
-            beforeSend: function() {},
-            success: function(data) {
-                if (data.status == 'Success') {
-                    console.log();
-                    /*
-                    var option_string ='';
-                    for (i = 0; i < data.data.length; i++) {
-                        option_string = option_string + '<option value="'+data.data[i].id+'">'+data.data[i].time+'</option>';
-                    }
-                    $('#show_id').html(option_string);
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        text: 'Something Went To Wrong',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                }
-                */
-            },
-            error: function(data) {
-                Swal.fire({
-                        icon: 'error',
-                        text: 'Something went wrong!',
-                        showConfirmButton: false,
-                        timer: 1500
-                });
-            },
-        });
-       
-
-});
+        type: 'post',
+        url: "{{ url('') }}" +'/api/booking/save_booking',
+        data: $('#book_form').serializeArray(),
+        headers: {
+            'Authorization': 'Bearer ' ,
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            clientid: " ",
+            clientsecret: " ",
+            'APIAuthKey':token,
+        },
+        beforeSend: function() {},
+        success: function(data) {
+            if (data.status == 'Success') {
+                swal("Finish!", "Your Booking Successfuly Finsh", "success");
+                alert('print data');
+            }else{
+                swal("Cancelled", "Your imaginary file is safe :)", "error"); 
+            }
+        },
+        error: function(data) {
+            swal("Cancelled", "Something went wrong)", "error"); 
+            /*
+            Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong!',
+                    showConfirmButton: false,
+                    timer: 1500
+            });
+            */
+        },
+    });
+}
 </script>
 @endpush
