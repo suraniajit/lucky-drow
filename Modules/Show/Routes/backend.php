@@ -19,22 +19,22 @@
 Route::prefix('show')->group(function() {
     Route::get('/', [
         'as' => 'admin.show.index',
-        'uses' => 'showController@index',
+        'uses' => 'ShowController@index',
         'middleware' => 'can:admin.show.index'
     ]);
     Route::get('/booking', [
         'as' => 'admin.show.booking',
-        'uses' => 'showController@booking',
+        'uses' => 'ShowController@booking',
         'middleware' => 'can:admin.show.booking'
     ]);
     Route::get('/result', [
         'as' => 'admin.show.result',
-        'uses' => 'showController@result',
+        'uses' => 'ShowController@result',
         'middleware' => 'can:admin.show.result'
     ]);
     Route::get('/result/history', [
         'as' => 'admin.show.history',
-        'uses' => 'showController@history',
+        'uses' => 'ShowController@history',
         'middleware' => 'can:admin.show.history'
     ]);
     

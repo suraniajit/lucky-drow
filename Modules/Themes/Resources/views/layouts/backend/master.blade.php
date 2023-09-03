@@ -6,7 +6,7 @@
   <link rel="preload" as="style" href="{{asset('modules/themes/backend/dist/css/adminlte.min.css')}}">
   <link rel="preload" as="script" href="{{asset('modules/themes/backend/dist/js/adminlte.js')}}">
   
-  <title>@yield('title') | Certify</title>
+  <title>@yield('title')</title>
   @include('themes::layouts.backend.partials.master_css')
   @stack('css-stack')
 </head>

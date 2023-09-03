@@ -12,6 +12,11 @@ use Modules\Core\Traits\AjaxPagination;
 use Modules\Booking\Entities\BookingDetail;
 use Modules\Booking\Contract\Backend\BookingRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use Modules\Balance\Entities\Balance;
+use Modules\Balance\Entities\BalanceTransaction;
+
+
+
 
 class BookingRepository implements BookingRepositoryInterface
 {
@@ -49,7 +54,8 @@ class BookingRepository implements BookingRepositoryInterface
                                 'shows.show_time',
                                 'users.email',
                                 'bookings.mobile'])
-                    ->paginate(10);
+                    ->orderBy('bookings.id', 'DESC')
+                    ->paginate(5);
             if($booking){
                 foreach($booking as $row){
                     $data[]=[
@@ -57,13 +63,16 @@ class BookingRepository implements BookingRepositoryInterface
                         'booking_id'                => $row->booking_id,
                         'balance_transaction_id'    => $row->transaction_id,
                         'booking_by'                => $row->email,
-                        'show'                      =>  $row->show_time,
+                        'show'                      =>  date('h:i:s a',strtotime($row->show_time)),
                         'date'                      =>  $row->booking_for,
                         'total'                     =>  $row->total,
                         'mobile'                    =>  $row->mobile,  
                     ];
                 }
-                return $this->successResponseArray($data, 'Successfully Get booking List!',null,['link'=>$this->ajaxPaginateLink($booking)]);
+                return $this->successResponseArray($data, 'Successfully Get booking List!',null,[
+                    'link'=>$this->ajaxPaginateLink($booking),
+                    'current_page'=> $booking->currentPage(),
+                'per_page'=> $booking->perPage(),]);
             }
             return $this->errorResponse(); 
         }
@@ -75,16 +84,14 @@ class BookingRepository implements BookingRepositoryInterface
     public function saveBooking($param){
         try {
             DB::beginTransaction();
-            //  DB::rollBack();
-            //  DB::commit();
             $data = [];
             $show_model = new Show();
             $symbole_model = new Symbole();
             $tiket_price = getSetting('tiket_price');
+            $booking_no = getBookingNo();
             $final_total = 0;
+            $user_id = Auth::user()->id;
             $show_data = Show::where('id',$param['show_id'])->first();
-            // booking balance 6 k nahi
-            // show available 6 k nahi
             if(!$show_data){
                 return $this->errorResponseArray('Show Not Found'); 
             }
@@ -99,11 +106,32 @@ class BookingRepository implements BookingRepositoryInterface
                 }
             }
             //check have enught balace
-            
+            if(!checkEnoughBalance($total_amount)){
+                return $this->errorResponseArray('No have sufficient balance for this order'); 
+            }
             //cut balance
-
-            //save main detail 
-            $this->booking->booking_id = '123456';
+            if(!Auth::user()->hasRole(config('core.super-admin'))){
+                $balance = new Balance();
+                $balance =$balance->where('user_id',$user_id)->first();
+                $old_balance = $balance->balance;
+                $new_balance = $balance->balance - $total_amount;
+                $balance->balance = $new_balance ;
+                $balance->save();
+                $transactionNo = getTransactionNo();
+                $balance_transaction = new BalanceTransaction();
+                $balance_transaction->transaction_id = $transactionNo;
+                $balance_transaction->user_id  = $user_id;
+                $balance_transaction->type =  BalanceTransaction::WITHDRAWAL;
+                $balance_transaction->amount = $total_amount;
+                $balance_transaction->status = BalanceTransaction::SUCCESS;
+                $balance_transaction->remark ='order booking '.$booking_no;
+                $balance_transaction->before_amount = $old_balance;
+                $balance_transaction->after_amount = $new_balance;
+                $balance_transaction->create_by = $user_id;
+                $balance_transaction->save();
+            }
+            //save booking main detail 
+            $this->booking->booking_id = $booking_no;
             $this->booking->balance_tranction_id = 1;
             $this->booking->show_id = $param['show_id'];
             $this->booking->booking_for = date('Y-m-d');
@@ -113,7 +141,6 @@ class BookingRepository implements BookingRepositoryInterface
             $this->booking->booking_by = Auth::user()->id;
             $this->booking->mobile = $param['mobile'];
             $this->booking->save();
-            
             // save booking item detail
             $create_bokking_detail =[];
             foreach($param['symbole_id'] as  $key=>$symbole_id){
@@ -128,7 +155,6 @@ class BookingRepository implements BookingRepositoryInterface
                         'net_total'=> $tiket_price * $param['symbole_booking_count'][$key],
                         'created_at'=> date('Y-m-d h:i:s'),
                         'updated_at'=> date('Y-m-d h:i:s'),
-                        
                     ];
                 }
             }

@@ -177,7 +177,7 @@
                         const templ = document.getElementById("grid-template");
                         for (i = 0; i < data.data.length; i++) {
                             const clone = templ.content.cloneNode(true);
-                            clone.querySelector(".id").innerHTML =i+1;
+                            clone.querySelector(".id").innerHTML = ((data.proparty.current_page-1) * data.proparty.per_page) + i+1;
                             clone.querySelector(".booking_id").innerHTML =data.data[i].booking_id;
                             clone.querySelector(".balance_transaction_id").innerHTML =data.data[i].balance_transaction_id;
                             clone.querySelector(".show").innerHTML =data.data[i].show;

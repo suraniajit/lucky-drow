@@ -19,7 +19,7 @@
 Route::prefix('symbole')->group(function() {
     Route::get('/', [
         'as' => 'admin.symbole.index',
-        'uses' => 'symboleController@index',
+        'uses' => 'SymboleController@index',
         'middleware' => 'can:admin.symbole.index'
     ]);
 

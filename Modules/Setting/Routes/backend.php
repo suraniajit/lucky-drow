@@ -19,7 +19,7 @@
 Route::prefix('setting')->group(function() {
     Route::get('/', [
         'as' => 'admin.setting.index',
-        'uses' => 'settingController@index',
+        'uses' => 'SettingController@index',
         'middleware' => 'can:admin.setting.index'
     ]);
 

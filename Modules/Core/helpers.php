@@ -3,8 +3,7 @@
 use Modules\Core\Http\Help\Module;
 use Illuminate\Support\Facades\Session;
 use Modules\Setting\Entities\Setting;
-
-
+use Modules\Balance\Entities\Balance;
 
 if (!function_exists('getModuleList')) {
     function getModuleList()
@@ -104,6 +103,13 @@ if (!function_exists('getTransactionNo')) {
         return uniqid();
     }
 }
+if (!function_exists('getBookingNo')) {
+    function getBookingNo()
+    {   
+        return strtoupper(date('Ymd').uniqid());
+    }
+}
+
 if (!function_exists('getDateTime')) {
     function getDateTime($datetime)
     {   
@@ -155,4 +161,24 @@ if (!function_exists('isOpenForSetting')) {
         return false;
     }
 }
+
+if (!function_exists('checkEnoughBalance')) {
+    function checkEnoughBalance($order_abount)
+    {   
+        
+        if(Auth::user()->hasRole(config('core.super-admin'))){
+            return true;
+        }
+        $user_acount = Balance::where('user_id',auth()->user()->id)->first();
+        if($user_acount){
+            if($user_acount->balance >= $order_abount){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+}
+
+
 

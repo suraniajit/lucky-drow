@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $backendModuleNamespace = 'Modules\Result\Http\Controllers\Backend';
     protected $frantendModuleNamespace = 'Modules\Result\Http\Controllers\Frantend';
-    protected $apiModuleNamespace = 'Modules\Result\Http\Controllers\API';
+    protected $apiModuleNamespace = 'Modules\Result\Http\Controllers\Api';
 
     /**
      * Called before routes are registered.

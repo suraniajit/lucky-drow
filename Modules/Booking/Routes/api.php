@@ -19,12 +19,12 @@ use Illuminate\Http\Request;
 Route::prefix('booking')->group(function() {
     Route::get('/', [
         'as' => 'api.booking.index',
-        'uses' => 'bookingController@index',
+        'uses' => 'BookingController@index',
         'middleware' => 'able:admin.booking.index'
     ]);
     Route::post('/save_booking', [
         'as' => 'api.booking.save_booking',
-        'uses' => 'bookingController@saveBooking',
+        'uses' => 'BookingController@saveBooking',
         'middleware' => 'able:admin.booking.create'
     ]);
     

@@ -19,49 +19,49 @@ use Illuminate\Http\Request;
 Route::prefix('result')->group(function() {
     Route::get('/', [
         'as' => 'api.result.index',
-        'uses' => 'resultController@index',
+        'uses' => 'ResultController@index',
         'middleware' => 'able:admin.result.index'
     ]);
 
     Route::post('/filters', [
         'as' => 'api.result.filters',
-        'uses' => 'resultController@filters',
+        'uses' => 'ResultController@filters',
         'middleware' => 'able:admin.result.filters'
     ]);
 
 
     Route::post('/save', [
         'as' => 'api.result.store',
-        'uses' => 'resultController@store',
+        'uses' => 'ResultController@store',
         'middleware' => 'able:admin.result.create'
     ]);
 
     Route::get('/edit/{id}', [
         'as' => 'api.result.edit',
-        'uses' => 'resultController@edit',
+        'uses' => 'ResultController@edit',
         'middleware' => 'able:admin.result.edit'
     ]);
 
     Route::put('/{id}', [
         'as' => 'api.result.update',
-        'uses' => 'resultController@update',
+        'uses' => 'ResultController@update',
         'middleware' => 'able:admin.result.edit'
     ]);
 
     Route::delete('/delete/{id}', [
         'as' => 'api.result.delete',
-        'uses' => 'resultController@delete',
+        'uses' => 'ResultController@delete',
         'middleware' => 'able:admin.result.delete'
     ]);
 
     Route::delete('/massDelete', [
         'as' => 'api.result.mass_delete',
-        'uses' => 'resultController@massDelete',
+        'uses' => 'ResultController@massDelete',
         'middleware' => 'able:admin.result.mass_delete'
     ]);
     Route::post('/update_status', [
         'as' => 'api.result.update_status',
-        'uses' => 'resultController@updateStatus',
+        'uses' => 'ResultController@updateStatus',
         'middleware' => 'able:admin.result.edit'
     ]);
 });

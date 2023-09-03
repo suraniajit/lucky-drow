@@ -18,49 +18,50 @@ use Illuminate\Http\Request;
 */
 Route::prefix('show')->group(function() {
     Route::get('/', [
-        'as' => 'admin.show.index',
+        'as' => 'api.show.index',
         'uses' => 'ShowController@index',
         'middleware' => 'able:admin.show.index'
     ]);
 
 
     Route::post('/save', [
-        'as' => 'admin.show.store',
-        'uses' => 'showController@store',
+        'as' => 'api.show.store',
+        'uses' => 'ShowController@store',
         'middleware' => 'able:admin.show.create'
     ]);
     Route::post('/update_status', [
-        'as' => 'admin.show.update_status',
-        'uses' => 'showController@statusUpdate',
+        'as' => 'api.show.update_status',
+        'uses' => 'ShowController@statusUpdate',
         'middleware' => 'able:admin.show.edit'
     ]);
+    /*
     Route::post('/delete/{id}', [
-        'as' => 'admin.show.delete',
-        'uses' => 'showController@destroy',
+        'as' => 'api.show.delete',
+        'uses' => 'ShowController@destroy',
         'middleware' => 'able:admin.show.delete'
     ]);
-
+    */
     Route::get('/edit/{id}', [
-        'as' => 'admin.show.edit',
-        'uses' => 'showController@edit',
+        'as' => 'api.show.edit',
+        'uses' => 'ShowController@edit',
         'middleware' => 'able:admin.show.edit'
     ]);
 
     Route::post('/update', [
-        'as' => 'admin.show.update',
-        'uses' => 'showController@update',
+        'as' => 'api.show.update',
+        'uses' => 'ShowController@update',
         'middleware' => 'able:admin.show.edit'
     ]);
 
     Route::delete('/delete/{id}', [
-        'as' => 'admin.show.delete',
-        'uses' => 'showController@delete',
+        'as' => 'api.show.delete',
+        'uses' => 'ShowController@delete',
         'middleware' => 'able:admin.show.delete'
     ]);
 
     Route::delete('/massDelete', [
-        'as' => 'admin.show.mass_delete',
-        'uses' => 'showController@massDelete',
+        'as' => 'api.show.mass_delete',
+        'uses' => 'ShowController@massDelete',
         'middleware' => 'able:admin.show.mass_delete'
     ]);
     
@@ -68,7 +69,7 @@ Route::prefix('show')->group(function() {
 
 });
 Route::get('/booking/show_list', [
-    'as' => 'admin.booking.show_list',
-    'uses' => 'showController@getBookingShowList',
+    'as' => 'api.booking.show_list',
+    'uses' => 'ShowController@getBookingShowList',
     'middleware' => 'able:admin.booking.show_list'
 ]);

@@ -18,54 +18,54 @@
 Route::prefix('result')->group(function() {
     Route::get('/', [
         'as' => 'user.result.index',
-        'uses' => 'resultController@index',
+        'uses' => 'ResultController@index',
         'middleware' => 'can:user.result.index'
     ]);
 
     Route::post('/filters', [
         'as' => 'user.result.filters',
-        'uses' => 'resultController@filters',
+        'uses' => 'ResultController@filters',
         'middleware' => 'can:user.result.filters'
     ]);
 
     Route::get('/create', [
         'as' => 'user.result.create',
-        'uses' => 'resultController@create',
+        'uses' => 'ResultController@create',
         'middleware' => 'can:user.result.create'
     ]);
 
     Route::post('/', [
         'as' => 'user.result.store',
-        'uses' => 'resultController@store',
+        'uses' => 'ResultController@store',
         'middleware' => 'can:user.result.create'
     ]);
 
     Route::get('/edit/{id}', [
         'as' => 'user.result.edit',
-        'uses' => 'resultController@edit',
+        'uses' => 'ResultController@edit',
         'middleware' => 'can:user.result.edit'
     ]);
 
     Route::put('/{id}', [
         'as' => 'user.result.update',
-        'uses' => 'resultController@update',
+        'uses' => 'ResultController@update',
         'middleware' => 'can:user.result.edit'
     ]);
 
     Route::delete('/delete/{id}', [
         'as' => 'user.result.delete',
-        'uses' => 'resultController@delete',
+        'uses' => 'ResultController@delete',
         'middleware' => 'can:user.result.delete'
     ]);
 
     Route::delete('/massDelete', [
         'as' => 'user.result.mass_delete',
-        'uses' => 'resultController@massDelete',
+        'uses' => 'ResultController@massDelete',
         'middleware' => 'can:user.result.mass_delete'
     ]);
     Route::post('/update_status', [
         'as' => 'user.result.update_status',
-        'uses' => 'resultController@updateStatus',
+        'uses' => 'ResultController@updateStatus',
         'middleware' => 'can:user.result.edit'
     ]);
 });

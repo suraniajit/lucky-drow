@@ -25,5 +25,10 @@ a.clickable-custom-link :hover {
     padding: 10px;
 }
 .symbole_label{
-    margin-top:30%
+    	margin-top:30%
+}
+.paginate_linkes{
+    	float: right;
+	margin-left: auto; 
+	margin-right: 0;
 }

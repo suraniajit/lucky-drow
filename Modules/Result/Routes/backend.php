@@ -19,12 +19,12 @@
 Route::prefix('result')->group(function() {
     Route::get('/', [
         'as' => 'admin.result.index',
-        'uses' => 'resultController@index',
+        'uses' => 'ResultController@index',
         'middleware' => 'can:admin.result.index'
     ]);
     Route::get('/history', [
         'as' => 'admin.result.history',
-        'uses' => 'resultController@history',
+        'uses' => 'ResultController@history',
         'middleware' => 'can:admin.result.history'
     ]);
 

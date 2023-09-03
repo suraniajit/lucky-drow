@@ -18,54 +18,54 @@
 Route::prefix('setting')->group(function() {
     Route::get('/', [
         'as' => 'user.setting.index',
-        'uses' => 'settingController@index',
+        'uses' => 'SettingController@index',
         'middleware' => 'can:user.setting.index'
     ]);
 
     Route::post('/filters', [
         'as' => 'user.setting.filters',
-        'uses' => 'settingController@filters',
+        'uses' => 'SettingController@filters',
         'middleware' => 'can:user.setting.filters'
     ]);
 
     Route::get('/create', [
         'as' => 'user.setting.create',
-        'uses' => 'settingController@create',
+        'uses' => 'SettingController@create',
         'middleware' => 'can:user.setting.create'
     ]);
 
     Route::post('/', [
         'as' => 'user.setting.store',
-        'uses' => 'settingController@store',
+        'uses' => 'SettingController@store',
         'middleware' => 'can:user.setting.create'
     ]);
 
     Route::get('/edit/{id}', [
         'as' => 'user.setting.edit',
-        'uses' => 'settingController@edit',
+        'uses' => 'SettingController@edit',
         'middleware' => 'can:user.setting.edit'
     ]);
 
     Route::put('/{id}', [
         'as' => 'user.setting.update',
-        'uses' => 'settingController@update',
+        'uses' => 'SettingController@update',
         'middleware' => 'can:user.setting.edit'
     ]);
 
     Route::delete('/delete/{id}', [
         'as' => 'user.setting.delete',
-        'uses' => 'settingController@delete',
+        'uses' => 'SettingController@delete',
         'middleware' => 'can:user.setting.delete'
     ]);
 
     Route::delete('/massDelete', [
         'as' => 'user.setting.mass_delete',
-        'uses' => 'settingController@massDelete',
+        'uses' => 'SettingController@massDelete',
         'middleware' => 'can:user.setting.mass_delete'
     ]);
     Route::post('/update_status', [
         'as' => 'user.setting.update_status',
-        'uses' => 'settingController@updateStatus',
+        'uses' => 'SettingController@updateStatus',
         'middleware' => 'can:user.setting.edit'
     ]);
 });

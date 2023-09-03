@@ -19,12 +19,12 @@
 Route::prefix('balance')->group(function() {
     Route::get('/', [
         'as' => 'admin.balance.index',
-        'uses' => 'balanceController@index',
+        'uses' => 'BalanceController@index',
         'middleware' => 'can:admin.balance.index'
     ]);
     Route::get('/history/{user_id}', [
         'as' => 'admin.balance.history',
-        'uses' => 'balanceController@history',
+        'uses' => 'BalanceController@history',
         'middleware' => 'can:admin.balance.history'
     ]);
 

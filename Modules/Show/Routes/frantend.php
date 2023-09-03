@@ -18,54 +18,54 @@
 Route::prefix('show')->group(function() {
     Route::get('/', [
         'as' => 'user.show.index',
-        'uses' => 'showController@index',
+        'uses' => 'ShowControllersss@index',
         'middleware' => 'can:user.show.index'
     ]);
 
     Route::post('/filters', [
         'as' => 'user.show.filters',
-        'uses' => 'showController@filters',
+        'uses' => 'ShowControllersss@filters',
         'middleware' => 'can:user.show.filters'
     ]);
 
     Route::get('/create', [
         'as' => 'user.show.create',
-        'uses' => 'showController@create',
+        'uses' => 'ShowControllersss@create',
         'middleware' => 'can:user.show.create'
     ]);
 
     Route::post('/', [
         'as' => 'user.show.store',
-        'uses' => 'showController@store',
+        'uses' => 'ShowControllersss@store',
         'middleware' => 'can:user.show.create'
     ]);
 
     Route::get('/edit/{id}', [
         'as' => 'user.show.edit',
-        'uses' => 'showController@edit',
+        'uses' => 'ShowControllersss@edit',
         'middleware' => 'can:user.show.edit'
     ]);
 
     Route::put('/{id}', [
         'as' => 'user.show.update',
-        'uses' => 'showController@update',
+        'uses' => 'ShowControllersss@update',
         'middleware' => 'can:user.show.edit'
     ]);
 
     Route::delete('/delete/{id}', [
         'as' => 'user.show.delete',
-        'uses' => 'showController@delete',
+        'uses' => 'ShowControllersss@delete',
         'middleware' => 'can:user.show.delete'
     ]);
 
     Route::delete('/massDelete', [
         'as' => 'user.show.mass_delete',
-        'uses' => 'showController@massDelete',
+        'uses' => 'ShowControllersss@massDelete',
         'middleware' => 'can:user.show.mass_delete'
     ]);
     Route::post('/update_status', [
         'as' => 'user.show.update_status',
-        'uses' => 'showController@updateStatus',
+        'uses' => 'ShowControllersss@updateStatus',
         'middleware' => 'can:user.show.edit'
     ]);
 });
