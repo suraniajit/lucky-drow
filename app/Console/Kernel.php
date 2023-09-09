@@ -15,6 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->call(function () {
+           info('evenry mini call');
+        })->everyMinute();
         // $schedule->command('inspire')->hourly();
     }
 
