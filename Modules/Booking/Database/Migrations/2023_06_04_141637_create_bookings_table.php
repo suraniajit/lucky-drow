@@ -16,7 +16,7 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->string('booking_id')->unique();
-            $table->unsignedBigInteger('balance_tranction_id');
+            $table->unsignedBigInteger('balance_tranction_id')->nullable();
             $table->unsignedBigInteger('show_id');
             $table->date('booking_for', 8, 2);
             $table->decimal('total', 8, 2);

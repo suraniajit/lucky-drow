@@ -49,13 +49,13 @@
             </div>
         </div>
     </div>
-    <template id="user-grid-template">
+    <template id="grid-template">
         <tr>
-            <th class="id"></th>
-            <td class="name"></td>
-            <td class="email"></td>
-            <td class="status"></td>
-            <td class="action"></td>
+            <th class="id grid_item" data-column="id"></th>
+            <td class="name grid_item" data-column ="name"></td>
+            <td class="email grid_item" data-column = "email"></td>
+            <td class="status grid_item" data-column="status" ></td>
+            <td class="action grid_item" data-column="action" ></td>
         </tr>            
     </template>
 
@@ -77,15 +77,15 @@
                                     <input type="text" name="user_name" id="input_name" class="form-control" placeholder="{!! __('user::user/labels.user-form-placeolder-name') !!}">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label for="inputEmail">{!! __('user::user/labels.user-form-email') !!}</label>
-                                    <input type="email" name="user_email" class="form-control " placeholder="{!! __('user::user/labels.user-form-placeolder-email') !!}">
+                                    <label for="user_email">{!! __('user::user/labels.user-form-email') !!}</label>
+                                    <input type="email" id="user_email" name="user_email" class="form-control " placeholder="{!! __('user::user/labels.user-form-placeolder-email') !!}">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label for="inputPassword">{!! __('user::user/labels.user-form-password') !!}</label>
-                                    <input type="password" id="inputPassword" name="user_password" class="form-control " placeholder="{!! __('user::user/labels.user-form-placeolder-password') !!}">
+                                    <label for="input_password">{!! __('user::user/labels.user-form-password') !!}</label>
+                                    <input type="password" id="input_password" name="user_password" class="form-control " placeholder="{!! __('user::user/labels.user-form-placeolder-password') !!}">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label for="inputRole">{!! __('user::user/labels.user-form-role') !!}</label>
+                                    <label for="user_roles">{!! __('user::user/labels.user-form-role') !!}</label>
                                     <select class="form-control" id="user_roles" name="user_role">
                                         <option></option>
                                     </select>
@@ -120,22 +120,22 @@
                         <form id="user_edit_form">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="inputEmail4">{!! __('role::role/labels.role-form-name') !!}</label>
+                                    <label for="user_name">{!! __('role::role/labels.role-form-name') !!}</label>
                                     <input type="hidden" value="" name="id"  id="data-id">
                                     <input type="text" name="user_name" class="form-control" id="user_name" placeholder="Please Enter User Name">
                                 </div>
                                 
                                 <div class="form-group col-md-12">
-                                    <label for="input_name">{!! __('user::user/labels.user-form-email') !!}</label>
+                                    <label for="user_email">{!! __('user::user/labels.user-form-email') !!}</label>
                                     <input type="text" name="user_email" id="user_email" class="form-control" placeholder="{!! __('user::user/labels.user-form-placeolder-email') !!}">
                                 </div>
                                
                                 <div class="form-group col-md-12">
-                                    <label for="inputPassword_edit">{!! __('user::user/labels.user-form-password') !!}</label>
-                                    <input type="password" id="inputPassword_edit" name="user_password" class="form-control " placeholder="{!! __('user::user/labels.user-form-placeolder-password') !!}">
+                                    <label for="input_password_edit">{!! __('user::user/labels.user-form-password') !!}</label>
+                                    <input type="password" id="input_password_edit" name="user_password" class="form-control " placeholder="{!! __('user::user/labels.user-form-placeolder-password') !!}">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label for="inputRole">{!! __('user::user/labels.user-form-role') !!}</label>
+                                    <label for="edit_user_roles">{!! __('user::user/labels.user-form-role') !!}</label>
                                     <select class="form-control" id="edit_user_roles" name="user_role">
                                         <option></option>
                                     </select>
@@ -155,13 +155,25 @@
             </div>
         </div>
     @endcan
-    
 @endsection
 @push('js-stack')
+<script src="{{asset('modules/themes/backend/js/custome/crud_opration.js')}}"></script>
+    <script>
+        const grid_element = $(".grid-data");
+        const grid_url = "{{ url('') }}" +'/api/user/';
+        const display_column ={id:'text',name:'text',email:'text',status:'text'};
+        @can('admin.user.edit')
+        const is_edit_action_available = true;
+        @endcan
+        @can('admin.user.delete')
+        const is_delete_action_available = true;
+        @endcan
+    </script>
     <script>
         $( document ).ready(function() {
             loadPageGrid();
         });
+
         $('#create_from_button').click(function(){
             var token = window.localStorage.getItem('token');     
             $.ajax({
@@ -189,6 +201,7 @@
                 }
             });
         });
+
         $('#user_submit').click(function(){
             var token = window.localStorage.getItem('token');
                 
@@ -225,6 +238,7 @@
             });
             $('#add_user_modal').modal('toggle');
         });
+
         function updateStatus(e){
             url = "{{ url('') }}" +'/api/user/update_status';
             var token = window.localStorage.getItem('token'); 
@@ -272,7 +286,8 @@
             });
             loadPageGrid();
         }
-        function getEditUser(e){
+
+        function getEditData(e){
             id = $(e).attr('data-id');
             url = "{{ url('') }}" +'/api/user/edit/'+id;
             var token = window.localStorage.getItem('token'); 
@@ -294,7 +309,7 @@
                         $('#data-id').val(data.data['user'].id);
                         $('#user_name').val(data.data['user'].name);
                         $('#user_email').val(data.data['user'].email);
-                        $('#inputPassword_edit').val('');
+                        $('#input_password_edit').val('');
                         var role_option ='';
                         for(var i = 0; i<data.data['roles'].length;i++)
                         {   
@@ -334,82 +349,7 @@
             });
             
         }
-        // above done
-        function loadPageGrid(e){
-            url = $(e).attr('data-page-url');
-            url = (url)?url:"{{ url('') }}" +'/api/user/';
-            var token = window.localStorage.getItem('token'); 
-            $.ajax({
-                type: 'get',
-                url: url,
-                data: {},
-                headers: {
-                    'Authorization': 'Bearer ' ,
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    clientid: " ",
-                    clientsecret: " ",
-                    'APIAuthKey':token,
-                },
-                beforeSend: function() {},
-                success: function(data) {
-                    if (data.status == 'Success') {
-                        if(data.data.length>0){
-                            $(".grid-data").html('');
-                            const templ = document.getElementById("user-grid-template");
-                            for (i = 0; i < data.data.length; i++) {
-                                var url = '{{url("/backend/role/permission-manage")}}/'+data.data[i].name;
-                                const clone = templ.content.cloneNode(true);
-                                clone.querySelector(".id").innerHTML =i+1;
-                                clone.querySelector(".name").innerHTML =data.data[i].name;
-                                clone.querySelector(".email").innerHTML =data.data[i].email;
-                                clone.querySelector(".status").innerHTML =data.data[i].status;
-                                var action_str ='<div class="row">';
-                                @can('admin.user.edit')
-                                    var checkedstring = (data.data[i].status_id == 1)?'checked':'';
-                                    var status_button ='<div class="custom-control custom-switch">'+
-                                                            '<input type="checkbox" data-id="'+data.data[i].id+'" '+ checkedstring +' onChange="updateStatus(this)" class="custom-control-input show_grid_status" id="customSwitch'+data.data[i].id+'">'+
-                                                            '<label class="custom-control-label" for="customSwitch'+data.data[i].id+'"></label>'+
-                                                        '</div>';
-                                    action_str = action_str +''+status_button ;
-                                    edit_button = '';
-                                    var edit_button =   '<button type="button" onClick="getEditUser(this)" data-id="'+data.data[i].id+'" class="btn btn-info btn-sm" >'+
-                                                            '<i class="fa fa-pencil" aria-hidden="true"></i>'+
-                                                        '</button>';
-                                    action_str = action_str +''+edit_button ;
-                                @endcan
-                                @can('admin.user.delete')
-                                    var delete_str = '<button type="button" onclick="deleteUser(this)" class="btn btn-danger btn-sm"  data-id="'+data.data[i].id+'">'+
-                                                        '<i class="fa fa-trash" aria-hidden="true"></i>'+
-                                                    '</button>';
-                                    action_str = action_str+''+ delete_str; 
-                                @endcan
-                                action_str = action_str+'</div>'; 
-                                // if(){}
-                                clone.querySelector(".action").innerHTML = action_str;
-                                $(".grid-data").append(clone);
-                            }
-                            $('#paginate').html(data.proparty.link);
-                        }
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            text: 'Something Went To Wrong',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    }
-                    
-                },
-                error: function(data) {
-                    Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong!',
-                            showConfirmButton: false,
-                            timer: 1500
-                         });
-                },
-            });
-        }
+
         $('#user_update').click(function(){
             var token = window.localStorage.getItem('token');     
             $.ajax({
@@ -455,9 +395,7 @@
             $('#edit_user_modal').modal('toggle');
         });
         
-
-        
-        function deleteUser(e){
+        function deleteData(e){
             Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -514,5 +452,6 @@
                 }
             });  
         }
+
     </script>   
 @endpush

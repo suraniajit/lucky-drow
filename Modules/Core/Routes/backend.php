@@ -13,15 +13,3 @@
 Route::get('/', function(){
     return redirect(route('admin.backend.login'));
 });
-Route::get('/login', [
-    'as' => 'admin.backend.login',
-    'uses' => 'AuthController@login',
-]);
-Route::post('/login', [
-    'as' => 'admin.backend.login_check',
-    'uses' => 'AuthController@loginCheck',
-]);
-Route::post('/logout', [
-    'as' => 'admin.backend.logout',
-    'uses' => 'AuthController@logout',
-]);

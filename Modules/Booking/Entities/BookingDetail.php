@@ -11,7 +11,7 @@ class BookingDetail extends Model
     protected $table = 'booking_details';
     protected $fillable = [
         'booking_id',
-        'sysmbol_id',
+        'symbol_id',
         'price',
         'book',
         'total_price',

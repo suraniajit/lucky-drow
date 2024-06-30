@@ -11,7 +11,3 @@
 |
 */
 
-Route::post('/login', [
-    'as' => 'api.admin.login',
-    'uses' => 'AuthController@checkLogin',
-]);

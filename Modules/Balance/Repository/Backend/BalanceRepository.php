@@ -48,11 +48,11 @@ class BalanceRepository implements BalanceRepositoryInterface
                     $data[]=[
                         'id'            =>  $user_balance->id,
                         'name'          =>  $user_balance->name,
-                        'email'          =>  $user_balance->email,
+                        'mail'          =>  $user_balance->email,
                         'balance'       =>  ($user_balance->balance)?$user_balance->balance:0.00,
                     ];
                 }
-                return $this->successResponseArray($data, 'Successfully All User Balance!',null,['link'=>$this->ajaxPaginateLink($user_balances)]);
+                return $this->successResponseArray($data, 'Successfully All User Balance!',null,['link'=>$this->ajaxPaginateLink($user_balances),'current_page'=>$user_balances->currentPage(),'per_page'=>$user_balances->perPage()]);
             }
             return $this->errorResponse();
         }

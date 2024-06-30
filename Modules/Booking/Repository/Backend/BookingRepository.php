@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\DB;
 use Modules\Balance\Entities\Balance;
 use Modules\Balance\Entities\BalanceTransaction;
 
-
-
-
 class BookingRepository implements BookingRepositoryInterface
 {
     use ApiResponser,AjaxPagination;
@@ -34,9 +31,9 @@ class BookingRepository implements BookingRepositoryInterface
         try {
             $data=[];
             $this->booking = $this->booking
-                    ->join('shows','shows.id','bookings.show_id')
-                    ->join('balance_transactions','balance_transactions.id','bookings.balance_tranction_id')
-                    ->join('users','users.id','bookings.booking_by');
+                    ->leftjoin('shows','shows.id','bookings.show_id')
+                    ->leftjoin('balance_transactions','balance_transactions.id','bookings.balance_tranction_id')
+                    ->leftjoin('users','users.id','bookings.booking_by');
                     
             if(!Auth::user()->hasRole(config('core.super-admin'))){
                 $this->booking = $this->booking->where('booking_by',Auth::user()->id);
@@ -132,7 +129,7 @@ class BookingRepository implements BookingRepositoryInterface
             }
             //save booking main detail 
             $this->booking->booking_id = $booking_no;
-            $this->booking->balance_tranction_id = 1;
+            $this->booking->balance_tranction_id = (!Auth::user()->hasRole(config('core.super-admin')))?$balance_transaction->id:null;
             $this->booking->show_id = $param['show_id'];
             $this->booking->booking_for = date('Y-m-d');
             $this->booking->total = $total_amount;
@@ -147,7 +144,7 @@ class BookingRepository implements BookingRepositoryInterface
                 if($param['symbole_booking_count'][$key] > 0){
                     $create_bokking_detail[]=[
                         'booking_id'=>$this->booking->id,
-                        'sysmbol_id'=>$symbole_id,
+                        'symbol_id'=>$symbole_id,
                         'price'=>$tiket_price,
                         'book'=>$param['symbole_booking_count'][$key],
                         'total_price'=> $tiket_price * $param['symbole_booking_count'][$key],

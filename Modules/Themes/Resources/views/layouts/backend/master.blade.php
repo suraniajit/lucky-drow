@@ -52,6 +52,8 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+          <div class="__notification">
+          </div>
           @yield('content')
       </div><!-- /.container-fluid -->
     </section>

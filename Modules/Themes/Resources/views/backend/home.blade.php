@@ -8,6 +8,9 @@
     <h1 class="cover-heading">wel-come</h1>
   </div>
 </div>
+
+
 @endsection
 @push('js-stack')
+
 @endpush

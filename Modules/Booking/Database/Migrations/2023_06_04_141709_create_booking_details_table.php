@@ -16,7 +16,7 @@ class CreateBookingDetailsTable extends Migration
         Schema::create('booking_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('booking_id');
-            $table->unsignedBigInteger('sysmbol_id');
+            $table->unsignedBigInteger('symbol_id');
             $table->string('price');                //each tiket price
             $table->integer('book');                 //no of tiket booking
             $table->decimal('total_price',8,2);          // total price 
@@ -25,7 +25,7 @@ class CreateBookingDetailsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('booking_id')->references('id')->on('bookings');
-            $table->foreign('sysmbol_id')->references('id')->on('symboles');
+            $table->foreign('symbol_id')->references('id')->on('symboles');
            
         });
     }

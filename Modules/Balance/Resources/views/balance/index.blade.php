@@ -47,10 +47,11 @@
     <template id="balance-grid-template">
         <tr>
             <th class="id"></th>
-            <td class="user"></td>
+            <td class="name"></td>
             <td class="mail"></td>
             <td class="balance"></td>
-            <td class="action"></td>
+            <td class="action_buttons">
+            </td>
         </tr>            
     </template>
 
@@ -176,24 +177,41 @@
         </div>
     @endcan    
 @endsection
-@push('js-stack')   
-   <script>
-        const deposit_request_url = "{{route('api.balance.deposit_request')}}";
-        const deposit_request_otp_varify_url = "{{route('api.balance.deposit_otp_varify')}}";
-        const withdrawal_request_url = "{{route('api.balance.withdrawal_request')}}";
-        const withdrawal_request_otp_varify_url = "{{route('api.balance.withdrawal_otp_varify')}}";
-    </script>
-    <script src="{{asset('modules/themes/backend/js/custome/image.js')}}"></script>
-    <script src="{{asset('modules/balance/backend/js/balance_deposit.js')}}"></script>
-    <script src="{{asset('modules/balance/backend/js/balance_withdrawal.js')}}"></script>
-    <script>
+@push('js-stack')  
+<script src="{{asset('modules/core/js/CrudOpration.js')}}"></script>
+<script src="{{asset('modules/balance/backend/js/balance_deposit.js')}}"></script>
+<script src="{{asset('modules/balance/backend/js/balance_withdrawal.js')}}"></script>
+<script>
+    const deposit_request_url = "{{route('api.balance.deposit_request')}}";
+    const deposit_request_otp_varify_url = "{{route('api.balance.deposit_otp_varify')}}";
+    const withdrawal_request_url = "{{route('api.balance.withdrawal_request')}}";
+    const withdrawal_request_otp_varify_url = "{{route('api.balance.withdrawal_otp_varify')}}";
+</script>
+<script src="{{asset('modules/themes/backend/js/custome/image.js')}}"></script>
+<script>
         $( document ).ready(function() {
-            loadPageGrid();
+            gridRander();
         });
+        function loadPageGrid(e){
+            gridRander(e);
+        }
+        function gridRander(e=null){
+            var grid_obj = new CrudOpration();
+            grid_obj = grid_obj.setGridContentName('.grid-data');
+            grid_obj = grid_obj.setGridTemplateId('balance-grid-template');
+            grid_obj = grid_obj.setGridUrl("{{route('api.balance.index')}}");
+            grid_obj = grid_obj.setDisplayColumn({
+                id:'id', 
+                name:'text',
+                mail:'text',
+                balance:'text',
+                action:'action_buttons',
+            });
+            grid_obj = grid_obj.setPaginationLinkContent('#paginate');
+            grid_obj.renderGrid(e);
+        }
         
-        // for withdrawal process
-       
-        // above done
+        /*
         function loadPageGrid(e){
             url = $(e).attr('data-page-url');
             url = (url)?url:"{{ url('') }}" +'/api/balance/';
@@ -269,5 +287,6 @@
                 },
             });
         }
+        */
     </script>   
 @endpush

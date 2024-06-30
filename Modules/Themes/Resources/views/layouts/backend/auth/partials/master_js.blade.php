@@ -19,17 +19,3 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('modules/themes/backend/dist/js/sweetalert/sweetalert2.js')}}"></script>
 <script src="{{asset('modules/themes/backend/js/custome/notification_messages.js')}}"></script>
-<script>
-  $('#_auth_key_id').val(window.localStorage.getItem('token'));
-</script>
-@if(!auth()->user()->hasRole(config('core.super-admin')))
-<script src="{{asset('modules/themes/backend/js/custome/balance.js')}}"></script>
-@endif
-<script>
-  const base_url = "{{ url('')}}";
-  $(document).ready(function(){
-    @if(!auth()->user()->hasRole(config('core.super-admin')))
-      getCurrentBalance();
-    @endif
-  });
-</script>

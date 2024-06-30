@@ -16,6 +16,12 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::post('/login', [
+    'as' => 'api.admin.login',
+    'uses' => 'AuthController@checkLogin',
+]);
+
 Route::prefix('user')->group(function() {
     Route::get('/', [
         'as' => 'api.user.index',

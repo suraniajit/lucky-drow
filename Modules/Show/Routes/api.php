@@ -20,7 +20,7 @@ Route::prefix('show')->group(function() {
     Route::get('/', [
         'as' => 'api.show.index',
         'uses' => 'ShowController@index',
-        'middleware' => 'able:admin.show.index'
+        // 'middleware' => 'able:admin.show.index'
     ]);
 
 
@@ -44,7 +44,7 @@ Route::prefix('show')->group(function() {
     Route::get('/edit/{id}', [
         'as' => 'api.show.edit',
         'uses' => 'ShowController@edit',
-        'middleware' => 'able:admin.show.edit'
+        // 'middleware' => 'able:admin.show.edit'
     ]);
 
     Route::post('/update', [

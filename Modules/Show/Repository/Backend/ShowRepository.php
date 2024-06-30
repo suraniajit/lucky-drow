@@ -155,7 +155,7 @@ class ShowRepository implements ShowRepositoryInterface
                     ->where('start_date','<=',date('Y-m-d'))
                     ->where('end_date','>=',date('Y-m-d'))
                     ->whereRaw('json_contains(show_day, \'["'.date('N').'"]\')')
-                    ->orderBy('show_time','DESC')
+                    ->orderBy('show_time')
                     ->get();
            
             if($shows){
@@ -173,4 +173,5 @@ class ShowRepository implements ShowRepositoryInterface
             return $this->errorResponse();
         }
     }
+    
 }

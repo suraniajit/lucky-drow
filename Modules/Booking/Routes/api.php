@@ -27,6 +27,27 @@ Route::prefix('booking')->group(function() {
         'uses' => 'BookingController@saveBooking',
         'middleware' => 'able:admin.booking.create'
     ]);
-    
+    Route::get('/edit/{id}', [
+        'as' => 'api.booking.edit',
+        'uses' => 'BookingController@edit',
+        'middleware' => 'able:admin.booking.edit'
+    ]);
+    Route::post('/update', [
+        'as' => 'api.booking.update',
+        'uses' => 'BookingController@update',
+        'middleware' => 'able:admin.booking.edit'
+    ]);
+
+    Route::delete('/delete/{id}', [
+        'as' => 'api.booking.delete',
+        'uses' => 'BookingController@delete',
+        'middleware' => 'able:admin.booking.delete'
+    ]);
+
+    Route::delete('/massDelete', [
+        'as' => 'api.booking.mass_delete',
+        'uses' => 'BookingController@massDelete',
+        'middleware' => 'able:admin.booking.mass_delete'
+    ]);
     
 });

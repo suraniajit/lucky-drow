@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-    <template id="show-grid-template">
+    <template id="grid-template">
         <tr>
             <th class="id"></th>
             <td class="name"></td>
@@ -179,6 +179,18 @@
     
 @endsection
 @push('js-stack')
+    <script src="{{asset('modules/themes/backend/js/custome/crud_opration.js')}}"></script>
+    <script>
+        const grid_element = $(".grid-data");
+        const grid_url = "{{ url('') }}" +'/api/show/';
+        const display_column ={id:'text',name:'text',time:'text',start_date:'text',end_date:'text',status:'text'};
+        @can('admin.show.edit')
+        const is_edit_action_available = true;
+        @endcan
+        @can('admin.show.delete')
+        const is_delete_action_available = true;
+        @endcan
+    </script>
     <script>
         $( document ).ready(function() {
             loadPageGrid();
@@ -262,7 +274,7 @@
             });
             $('#add_show_modal').modal('toggle');
         });
-        function getEditShow(e){
+        function getEditData(e){
             id = $(e).attr('data-id');
             url = "{{ url('') }}" +'/api/show/edit/'+id;
             var token = window.localStorage.getItem('token'); 
@@ -321,7 +333,7 @@
             });
             
         }
-        function deleteShow(e){
+        function deleteData(e){
             Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -405,83 +417,6 @@
                             timer: 1500
                         });
                         loadPageGrid();
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            text: 'Something Went To Wrong',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    }
-                    
-                },
-                error: function(data) {
-                    Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong!',
-                            showConfirmButton: false,
-                            timer: 1500
-                         });
-                },
-            });
-        }
-        function loadPageGrid(e){
-            url = $(e).attr('data-page-url');
-            url = (url)?url:"{{ url('') }}" +'/api/show/';
-            var token = window.localStorage.getItem('token'); 
-            $.ajax({
-                type: 'get',
-                url: url,
-                data: {},
-                headers: {
-                    'Authorization': 'Bearer ' ,
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    clientid: " ",
-                    clientsecret: " ",
-                    'APIAuthKey':token,
-                },
-                beforeSend: function() {},
-                success: function(data) {
-                    if (data.status == 'Success') {
-                        if(data.data.length>0){
-                            $(".grid-data").html('');
-                            const templ = document.getElementById("show-grid-template");
-                            for (i = 0; i < data.data.length; i++) {
-                                var url = '{{url("/backend/role/permission-manage")}}/'+data.data[i].name;
-                                const clone = templ.content.cloneNode(true);
-                                clone.querySelector(".id").innerHTML =i+1;
-                                clone.querySelector(".name").innerHTML =data.data[i].name;
-                                clone.querySelector(".time").innerHTML =data.data[i].time;
-                                clone.querySelector(".start_date").innerHTML =data.data[i].start_date;
-                                clone.querySelector(".end_date").innerHTML =data.data[i].end_date;
-                                clone.querySelector(".status").innerHTML =data.data[i].status;
-                                var action_str ='<div class="row">';
-                                @can('admin.show.edit')
-                                    var checkedstring = (data.data[i].status_id == 1)?'checked':'';
-                                    var status_button ='<div class="custom-control custom-switch">'+
-                                                            '<input type="checkbox" data-id="'+data.data[i].id+'" '+ checkedstring +' onChange="updateStatus(this)" class="custom-control-input show_grid_status" id="customSwitch'+data.data[i].id+'">'+
-                                                            '<label class="custom-control-label" for="customSwitch'+data.data[i].id+'"></label>'+
-                                                        '</div>';
-                                    action_str = action_str +''+status_button ;
-                                    edit_button = '';
-                                    var edit_button =   '<button type="button" onClick="getEditShow(this)" data-id="'+data.data[i].id+'" class="btn btn-info btn-sm" >'+
-                                                            '<i class="fa fa-pencil" aria-hidden="true"></i>'+
-                                                        '</button>';
-                                    action_str = action_str +''+edit_button ;
-                                @endcan
-                                @can('admin.show.delete')
-                                    var delete_str = '<button type="button" onclick="deleteShow(this)" class="btn btn-danger btn-sm"  data-id="'+data.data[i].id+'">'+
-                                                        '<i class="fa fa-trash" aria-hidden="true"></i>'+
-                                                    '</button>';
-                                    action_str = action_str+''+ delete_str; 
-                                @endcan
-                                action_str = action_str+'</div>'; 
-                                
-                                clone.querySelector(".action").innerHTML = action_str;
-                                $(".grid-data").append(clone);
-                            }
-                            $('#paginate').html(data.proparty.link);
-                        }
                     }else{
                         Swal.fire({
                             icon: 'error',

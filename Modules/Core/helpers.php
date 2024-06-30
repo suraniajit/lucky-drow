@@ -4,6 +4,12 @@ use Modules\Core\Http\Help\Module;
 use Illuminate\Support\Facades\Session;
 use Modules\Setting\Entities\Setting;
 use Modules\Balance\Entities\Balance;
+use Modules\Booking\Entities\Booking;
+use Modules\Booking\Entities\BookingDetail;
+use Illuminate\Support\Facades\DB;
+use Modules\Symbole\Entities\Symbole;
+use Modules\Show\Entities\Show;
+use Modules\Result\Entities\WinningShow;
 
 if (!function_exists('getModuleList')) {
     function getModuleList()
@@ -58,13 +64,10 @@ if (!function_exists('createThumbnail')) {
         }else{
             return $destiation_image_path;
         }
-
-        
     }
 }
 if (!function_exists('uploadImage')) {
-    function uploadImage($params)
-    {   
+    function uploadImage($params){   
         $file = $params['file'];
         $path_to_store = $params['path'];
         $filenametostore = $params['name'];
@@ -73,23 +76,6 @@ if (!function_exists('uploadImage')) {
     }
 }
 
-if (!function_exists('displayAlert')) {
-    function displayAlert()
-    {
-        if (Session::has('message'))
-        {
-           list($type, $message) = explode('|', Session::get('message'));
-            $type = $type == 'error' ?: 'danger';
-            $type = $type == 'message' ?: 'info';
-            $string ='<div class="alert alert-danger alert-dismissible">';
-            $string .= '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
-            $string .= '<h4><i class="icon fa fa-ban"></i> Alert!</h4>';
-            $string .= $message;
-            $string .="</div>";
-            echo $string;
-        }
-    }
-}
 if (!function_exists('getThemeString')) {
     function getThemeString()
     {   
@@ -100,7 +86,7 @@ if (!function_exists('getThemeString')) {
 if (!function_exists('getTransactionNo')) {
     function getTransactionNo()
     {   
-        return uniqid();
+        return strtoupper(date('Ymd').uniqid());
     }
 }
 if (!function_exists('getBookingNo')) {
@@ -180,5 +166,121 @@ if (!function_exists('checkEnoughBalance')) {
     }
 }
 
+if (!function_exists('getSymboleWiseBooking')) {
+    function getSymboleWiseBooking($date,$time){
+        $datas = BookingDetail::
+            join('bookings','booking_details.booking_id','bookings.id')
+            ->join('symboles','symboles.id','=','booking_details.symbol_id')
+            ->join('shows','shows.id','=','bookings.show_id')
+            ->select([
+                DB::raw('SUM(book) as total_booking'),
+                'symbol_id',
+             ])
+            ->where('shows.show_time',$time)
+            ->where('bookings.booking_for',$date)
+            ->groupBy('symbol_id')
+            ->get();
+        $symbole_wise_booking = [];
+        foreach(Symbole::get() as $symbole){
+            $symbole_wise_booking[$symbole->id] = 0;
+            foreach($datas as $data){
+                if($data->symbol_id == $symbole->id){
+                    $symbole_wise_booking[$symbole->id] = $data->total_booking;
+                }      
+            }
+        }
+        return $symbole_wise_booking;
+    }
+}
+if (!function_exists('getLuckyDrowWinningSymbole')) {
+    function getLuckyDrowWinningSymbole($date,$time){
+        $wining_amount_symobole_wise = [];
+        $total_collection = 0;
+        $tiket_price = getSetting('tiket_price');
+        $showWiseBooking = getSymboleWiseBooking($date,$time);
+        $per_tiket_winning = getWinningAmount();
+        foreach($showWiseBooking as $key=>$booking){
+            $wining_amount_symobole_wise[$key] = $booking * $per_tiket_winning  ;
+            $total_collection += $booking * $tiket_price;
+        } 
+        $setting = getSetting('win_quata');
+        $winner_symbole = null;
+        
+        /*
+        echo "collection total=>".$total_collection;
+        echo "<br>";
+        echo "winning price => ". $per_tiket_winning;
+        echo "<pre>";
+        echo "wing cota";
 
+        print_r($showWiseBooking);
+        echo "<pre>";
+        print_r($wining_amount_symobole_wise);
+        die;  
+        */
+        
+        foreach($setting as $class){
+            if($winner_symbole != null)
+                break;
+            if($total_collection <= 0)
+                break;
+            foreach($wining_amount_symobole_wise as $symbole_id=>$booking_win_amount){
+                if($winner_symbole != null)
+                    break;
+                $win_per = ( $booking_win_amount * 100) / $total_collection ;
+                if(($class->start_quata < $win_per) && ($class->end_quata > $win_per)  ){
+                    $winner_symbole = $symbole_id;
+                }
+            }
+        }
+        if($winner_symbole == null){
+            asort($showWiseBooking);
+            $showWiseBooking = array_keys($showWiseBooking);
+            $winner_symbole = $showWiseBooking[0];
+        }      
+        return [
+            'winner_symbole'        =>  $winner_symbole,
+            'total_collection'      =>  $total_collection,
+            'total_winning_amount'  =>  $wining_amount_symobole_wise[$winner_symbole],
+            'symbole_wise_booking'  =>  $showWiseBooking,
+        ];
+    }
+}
+if (!function_exists('getWinningAmount')) {
+    function getWinningAmount(){
+        if(getSetting('auto_win_price')){
+            return (Symbole::count() * $tiket_price) ;
+        }else{
+            return getSetting('win_price') *  getSetting('tiket_price') ;
+        }
+    }
+}
+if(!function_exists('getNextDrowshowTime')){  
+    function getNextDrowshowTime(){
+        $current_date_string = date('Y-m-d');
+        $current_time_string = date('H:i:00');
+        $show_drow_complete = WinningShow::where('drow_date',$current_date_string)
+                    ->pluck('show_id')
+                    ->toArray();
+        $shows =  Show::where('show_time','<=',date('H:i:s'))
+                    ->where('status',Show::ENABLE)
+                    ->where('start_date','<=',date('Y-m-d'))
+                    ->where('end_date','>=',date('Y-m-d'))
+                    ->whereNotIn('shows.id',$show_drow_complete)
+                    ->whereRaw('json_contains(show_day, \'["'.date('N').'"]\')')
+                    ->orderBy('show_time')
+                    ->first();
+        if($shows){
+            return [
+                'result'    =>  true,
+                'drow_date'      =>  date('Y-m-d'),
+                'time'      =>  $shows->show_time,
+                'show_id'   =>  $shows->id,
+            ];
+        }
+        return [
+            'result'=>false,
+        ];
+    }
 
+}
